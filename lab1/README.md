@@ -1,4 +1,4 @@
-# os-lab
+# os-lab 1
+scheduler.c : A simulator for CPU scheduler using FCFS, SJF and RR
 
-(1) scheduler.c : A simulator for CPU scheduler using FCFS, SJF and RR
-    dependencies : input
+dependencies : input

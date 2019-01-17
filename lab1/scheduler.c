@@ -88,10 +88,10 @@ int main(int argc, char **argv){
         if(total_time > file[])*/
     }
     else if( argc == 3 && !strcmp(argv[2], "SJF") ) {
-        printf("Now running %s\n", argv[2]);
+        printf("Scheduling Algorithm: %s\n", argv[2]);
     }
     else if( argc == 4 && !strcmp(argv[2], "RR") && (slice > 0) ) {
-        printf("Now running %s with time-slice of %d ms\n", argv[2], slice);
+        printf("Scheduling Algorithm: %s with time-slice of %d ms\n", argv[2], slice);
     }
     else{
         printf("Wrong input format:\n");

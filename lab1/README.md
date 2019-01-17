@@ -5,5 +5,5 @@
 
 **How To** :
 
-    * *compile* $ gcc scheduler.c -o scheduler
-    * *run* $ ./scheduler input FCFS
+    * $ gcc scheduler.c -o scheduler
+    * $ ./scheduler input FCFS

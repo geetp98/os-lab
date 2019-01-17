@@ -48,14 +48,18 @@ int main(int argc, char **argv){
     }
     fclose(fp);
 
-    int* file = (int*)malloc(lines*3*sizeof(int));
+    int** file = (int**)malloc(lines*sizeof(int));
+    for (i=0; i < lines; i++) {
+        file[i] = (int *)malloc(3 * sizeof(int));
+    }
+
     fp = fopen(filename, "r");
     while( ( check = fscanf(fp, "%d %d %d", &pid, &arrival_time, &burst_time) ) != EOF) {
         if( check == 3 ) {
-            file[i] = pid;
-            file[i+1] = arrival_time;
-            file[i+2] = burst_time;
-            i += 3;
+            file[0][i] = pid;
+            file[1][i] = arrival_time;
+            file[2][i] = burst_time;
+            i += 1;
         }
         else{
             printf("File corrupted!!\n");
@@ -65,19 +69,23 @@ int main(int argc, char **argv){
     fclose(fp);
 
     /* Prints the array */
-    /*
     i = 0;
-    while( i <= 3*sizeof(file) ) {
-        printf("%d %d %d", file[i], file[i+1], file[i+2]);
-        if( i%3 == 0 ) {
-            printf("\n");
-        }
-        i += 3;
-    }*/
+    while( i <= lines ) {
+        printf("%d %d %d\n", file[0][i], file[1][i], file[2][i]);
+        i++;
+    }
 
     /* Structure for operation of the scheduler. Don't need to touch this. */
     if( argc == 3 && !strcmp(argv[2], "FCFS") ) {
-        printf("Now running %s\n", argv[2]);
+        printf("Scheduling Algorithm: %s\n", argv[2]);
+        /*int time = 0;
+        int total_time = 0;
+        i = 0;
+        while(i < lines){
+            total_time = total_time + file[2][i] - file[1][i];
+            i++;
+        }
+        if(total_time > file[])*/
     }
     else if( argc == 3 && !strcmp(argv[2], "SJF") ) {
         printf("Now running %s\n", argv[2]);

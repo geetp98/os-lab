@@ -23,8 +23,6 @@ int isdigit2(char *s) {
     return sum;
 }
 
-/* For testing purposes purposes, run '$ gcc scheduler.c -o scheduler' to compile
-   and '$ ./scheduler input.txt FCFS' to run. File 'input' is attached.*/
 int main(int argc, char **argv){
     
     int check = 0;

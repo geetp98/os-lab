@@ -47,7 +47,6 @@ int main(int argc, char **argv){
         }
     }
     fclose(fp);
-    /* printf("lines %d\n", lines); */
 
     int* file = (int*)malloc(lines*3*sizeof(int));
     fp = fopen(filename, "r");
@@ -57,8 +56,6 @@ int main(int argc, char **argv){
             file[i+1] = arrival_time;
             file[i+2] = burst_time;
             i += 3;
-            //printf("1\n");
-            //printf("%d %d %d\n", pid, arrival_time, burst_time);
         }
         else{
             printf("File corrupted!!\n");
@@ -68,6 +65,7 @@ int main(int argc, char **argv){
     fclose(fp);
 
     /* Prints the array */
+    /*
     i = 0;
     while( i <= 3*sizeof(file) ) {
         printf("%d %d %d", file[i], file[i+1], file[i+2]);
@@ -75,7 +73,7 @@ int main(int argc, char **argv){
             printf("\n");
         }
         i += 3;
-    }
+    }*/
 
     /* Structure for operation of the scheduler. Don't need to touch this. */
     if( argc == 3 && !strcmp(argv[2], "FCFS") ) {

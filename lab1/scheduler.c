@@ -8,6 +8,7 @@ void insert_by_priority(int n1, int n2, int n3, int p);
 void delete_top();
 void create();
 void check(int n1, int n2, int n3, int p);
+void display_pqueue();
 //void display_pqueue();
 
 int pq[4][INT16_MAX] = {0};
@@ -36,7 +37,7 @@ int main(int argc, char **argv){
     
     ///////////////////////////////////////////////////
     /* input methods until line 87. Don't touch before that.*/
-    int check = 0;
+    /*int check = 0;
     int i = 0;
     int lines = 0;
     char c;
@@ -44,10 +45,10 @@ int main(int argc, char **argv){
     int slice;
     if( argc == 4 ){
         slice = isdigit2(argv[3]);
-    }
+    }*/
 
     /* Convert a suitable file into an array of integers */
-    int pid, arrival_time, burst_time;
+    /*int pid, arrival_time, burst_time;
     char *filename = argv[1];
     FILE *fp;
     fp = fopen(filename, "r");
@@ -75,7 +76,7 @@ int main(int argc, char **argv){
             return -1;
         }
     }
-    fclose(fp);
+    fclose(fp);*/
 
     /* Prints the array
     i = 0;
@@ -88,7 +89,7 @@ int main(int argc, char **argv){
        A random Star Wars quote.
        Yes, I like prequels and dont judge me for that.*/
 
-    if( argc == 3 && !strcmp(argv[2], "FCFS") ) {
+    /*if( argc == 3 && !strcmp(argv[2], "FCFS") ) {
         printf("Scheduling Algorithm: %s\n", argv[2]);
         
     }
@@ -102,14 +103,49 @@ int main(int argc, char **argv){
         printf("Wrong input format:\n");
         printf("./scheduler <filename> <FCFS|SJF|RR> <quantum(only positive integers)>\n");
         return -1;
-    }
+    }*/
+
+    /////////////////////////
+    /* this place is reserved for queue. do not mess*/
+    create();
+    printf("\n");
+    printf("front rear: %d %d\n", front, rear);
+    insert_by_priority(1,1,1,1);
+    printf("front rear: %d %d\n", front, rear);
+    display_pqueue();
+    printf("\n");
+    insert_by_priority(4,2,3,4);
+    printf("front rear: %d %d\n", front, rear);
+    display_pqueue();
+    printf("\n");
+    insert_by_priority(2,3,1,3);
+    printf("front rear: %d %d\n", front, rear);
+    display_pqueue();
+    printf("\n");
+
+    delete_top();
+    printf("front rear: %d %d\n", front, rear);
+    display_pqueue();
+    printf("\n");
+    delete_top();
+    printf("front rear: %d %d\n", front, rear);
+    display_pqueue();
+    printf("\n");
+    delete_top();
+    printf("front rear: %d %d\n", front, rear);
+    display_pqueue();
+    printf("\n");
+    printf("front rear: %d %d\n", front, rear);
+    /////////////////////////
+
 
     return 0;
 }
 
 void create()
 {
-    front = rear = -1;
+    front = -1;
+    rear = -1;
 }
 
 void insert_by_priority(int n1, int n2, int n3, int p)
@@ -121,17 +157,22 @@ void insert_by_priority(int n1, int n2, int n3, int p)
     }
     if( (front == -1) && (rear == -1) )
     {
-        front += 1;
-        rear += 1;
+        printf("in front = -1 and rear = -1 condition\n");
+        front = 0;
+        rear = 0;
         pq[0][rear] = n1;
         pq[1][rear] = n2;
         pq[2][rear] = n3;
         pq[4][rear] = p;
+        printf("returning successfully\n");
         return;
     }
-    else
+    else{
+        printf("going to check\n");
         check(n1, n2, n3, p);
-    rear++;
+        printf("returned from check\n");
+        rear++;
+    }
     return;
 }
 
@@ -154,6 +195,11 @@ void check(int n1, int n2, int n3, int p)
             return;
         }
     }
+    pq[0][i] = n1;
+    pq[1][i] = n2;
+    pq[2][i] = n3;
+    pq[3][i] = p;
+    return;
 }
 
 void delete_top(){
@@ -169,5 +215,27 @@ void delete_top(){
     pq[2][rear] = 0;
     pq[3][rear] = 0;
     rear -= 1;
+
+    if( rear == -1 ) {
+        front = -1;
+    }
+    return;
+}
+
+void display_pqueue()
+{
+    if ((front == -1) && (rear == -1))
+    {
+        printf("\nQueue is empty");
+        return;
+    }
+
+    int i;
+    for (i = front; i <= rear; i+=1)
+    {
+        printf("%d %d %d %d ,", pq[0][i], pq[1][i], pq[2][i], pq[3][i]);
+    }
+
+    printf("queue finished\n");
     return;
 }

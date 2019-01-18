@@ -26,7 +26,7 @@ int isdigit2(char *s) {
 int main(int argc, char **argv){
     
     ///////////////////////////////////////////////////
-    /* input methods until line 77. Don't touch that.*/
+    /* input methods until line 79. Don't touch that.*/
     int check = 0;
     int i = 0;
     int lines = 0;
@@ -82,14 +82,7 @@ int main(int argc, char **argv){
 
     if( argc == 3 && !strcmp(argv[2], "FCFS") ) {
         printf("Scheduling Algorithm: %s\n", argv[2]);
-        /*int time = 0;
-        int total_time = 0;
-        i = 0;
-        while(i < lines){
-            total_time = total_time + file[2][i] - file[1][i];
-            i++;
-        }
-        if(total_time > file[])*/
+        
     }
     else if( argc == 3 && !strcmp(argv[2], "SJF") ) {
         printf("Scheduling Algorithm: %s\n", argv[2]);

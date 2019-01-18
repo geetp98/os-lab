@@ -46,8 +46,7 @@ int main(int argc, char **argv){
         slice = isdigit2(argv[3]);
     }
 
-    /* Convert a file into an array of integers */
-
+    /* Convert a suitable file into an array of integers */
     int pid, arrival_time, burst_time;
     char *filename = argv[1];
     FILE *fp;
@@ -115,12 +114,12 @@ void create()
 
 void insert_by_priority(int n1, int n2, int n3, int p)
 {
-    if (rear >= INT16_MAX - 1)
+    if( rear >= INT16_MAX - 1 )
     {
         printf("\nToo many processes.");
         return;
     }
-    if ((front == -1) && (rear == -1))
+    if( (front == -1) && (rear == -1) )
     {
         front += 1;
         rear += 1;
@@ -140,12 +139,9 @@ void check(int n1, int n2, int n3, int p)
 {
     int i, j;
 
-    for (i = 0; i <= rear; i += 1)
-    {
-        if (p >= pq[4][i])
-        {
-            for (j = rear + 1; j > i; j -= 1)
-            {
+    for( i = 0; i <= rear; i += 1 ) {
+        if( p >= pq[4][i] ) {
+            for ( j = rear + 1; j > i; j -= 1 ) {
                 pq[0][j] = pq[0][j-1];
                 pq[1][j] = pq[1][j-1];
                 pq[2][j] = pq[2][j-1];
@@ -162,7 +158,7 @@ void check(int n1, int n2, int n3, int p)
 
 void delete_top(){
     int i;
-    for(i = 0; i < rear; i+= 1){
+    for( i = 0; i < rear; i+= 1 ) {
         pq[0][i] = pq[0][i+1];
         pq[1][i] = pq[1][i+1];
         pq[2][i] = pq[2][i+1];
@@ -173,6 +169,5 @@ void delete_top(){
     pq[2][rear] = 0;
     pq[3][rear] = 0;
     rear -= 1;
-
     return;
 }

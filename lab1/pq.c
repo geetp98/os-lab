@@ -9,12 +9,15 @@ void create();
 void check(int);
 void display_pqueue();
 
-int pri_que[MAX];
+int pq_pid[MAX];
+int pq_artime[MAX];
+int pq_brtime[MAX];
+
 int front, rear;
 
 int main()
 {
-    int n, ch;
+    int n1, n2, n3, ch;
 
     printf("\n1 - Insert an element into queue");
     printf("\n2 - Delete an element from queue");
@@ -32,8 +35,9 @@ int main()
         {
         case 1:
             printf("\nEnter value to be inserted : ");
-            scanf("%d", &n);
-            insert_by_priority(n);
+            scanf("%d %d %d", &n1, &n2, &n3);
+            int p = n2;
+            insert_by_priority(n1, n2, n3, p);
             break;
         case 2:
             printf("\nEnter value to delete : ");
@@ -44,7 +48,7 @@ int main()
             display_pqueue();
             break;
         case 4:
-            break;
+            exit(0);
         default:
             printf("\nChoice is incorrect, Enter a correct choice");
         }
@@ -70,7 +74,7 @@ void insert_by_priority(int data)
     {
         front++;
         rear++;
-        pri_que[rear] = data;
+        pq_pid[rear] = data;
         return;
     }
     else
@@ -85,17 +89,17 @@ void check(int data)
 
     for (i = 0; i <= rear; i++)
     {
-        if (data >= pri_que[i])
+        if (data >= pq_pid[i])
         {
             for (j = rear + 1; j > i; j--)
             {
-                pri_que[j] = pri_que[j - 1];
+                pq_pid[j] = pq_pid[j - 1];
             }
-            pri_que[i] = data;
+            pq_pid[i] = data;
             return;
         }
     }
-    pri_que[i] = data;
+    pq_pid[i] = data;
 }
 
 /* Function to delete an element from queue */
@@ -111,14 +115,14 @@ void delete_by_priority(int data)
 
     for (i = 0; i <= rear; i++)
     {
-        if (data == pri_que[i])
+        if (data == pq_pid[i])
         {
             for (; i < rear; i++)
             {
-                pri_que[i] = pri_que[i + 1];
+                pq_pid[i] = pq_pid[i + 1];
             }
 
-            pri_que[i] = -99;
+            pq_pid[i] = -99;
             rear--;
 
             if (rear == -1)
@@ -140,7 +144,7 @@ void display_pqueue()
 
     for (; front <= rear; front++)
     {
-        printf(" %d ", pri_que[front]);
+        printf(" %d ", pq_pid[front]);
     }
 
     front = 0;

@@ -4,6 +4,15 @@
 #include <math.h>
 #include <stdlib.h>
 
+void insert_by_priority(int n1, int n2, int n3, int p);
+void delete_top();
+void create();
+void check(int n1, int n2, int n3, int p);
+//void display_pqueue();
+
+int pq[4][INT16_MAX] = {0};
+int front, rear;
+
 int isdigit2(char *s) {
     /* Convert a character array into integer,
        but only after verification that
@@ -26,7 +35,7 @@ int isdigit2(char *s) {
 int main(int argc, char **argv){
     
     ///////////////////////////////////////////////////
-    /* input methods until line 79. Don't touch that.*/
+    /* input methods until line 87. Don't touch before that.*/
     int check = 0;
     int i = 0;
     int lines = 0;
@@ -97,4 +106,73 @@ int main(int argc, char **argv){
     }
 
     return 0;
+}
+
+void create()
+{
+    front = rear = -1;
+}
+
+void insert_by_priority(int n1, int n2, int n3, int p)
+{
+    if (rear >= INT16_MAX - 1)
+    {
+        printf("\nToo many processes.");
+        return;
+    }
+    if ((front == -1) && (rear == -1))
+    {
+        front += 1;
+        rear += 1;
+        pq[0][rear] = n1;
+        pq[1][rear] = n2;
+        pq[2][rear] = n3;
+        pq[4][rear] = p;
+        return;
+    }
+    else
+        check(n1, n2, n3, p);
+    rear++;
+    return;
+}
+
+void check(int n1, int n2, int n3, int p)
+{
+    int i, j;
+
+    for (i = 0; i <= rear; i += 1)
+    {
+        if (p >= pq[4][i])
+        {
+            for (j = rear + 1; j > i; j -= 1)
+            {
+                pq[0][j] = pq[0][j-1];
+                pq[1][j] = pq[1][j-1];
+                pq[2][j] = pq[2][j-1];
+                pq[3][j] = pq[3][j-1];
+            }
+            pq[0][i] = n1;
+            pq[1][i] = n2;
+            pq[2][i] = n3;
+            pq[3][i] = p;
+            return;
+        }
+    }
+}
+
+void delete_top(){
+    int i;
+    for(i = 0; i < rear; i+= 1){
+        pq[0][i] = pq[0][i+1];
+        pq[1][i] = pq[1][i+1];
+        pq[2][i] = pq[2][i+1];
+        pq[3][i] = pq[3][i+1];
+    }
+    pq[0][rear] = 0;
+    pq[1][rear] = 0;
+    pq[2][rear] = 0;
+    pq[3][rear] = 0;
+    rear -= 1;
+
+    return;
 }

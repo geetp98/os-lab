@@ -25,6 +25,8 @@ int isdigit2(char *s) {
 
 int main(int argc, char **argv){
     
+    ///////////////////////////////////////////////////
+    /* input methods until line 77. Don't touch that.*/
     int check = 0;
     int i = 0;
     int lines = 0;
@@ -48,17 +50,16 @@ int main(int argc, char **argv){
     }
     fclose(fp);
 
-    int** file = (int**)malloc(lines*sizeof(int));
-    for (i=0; i < lines; i++) {
-        file[i] = (int *)malloc(3 * sizeof(int));
-    }
-
+    int file[3][lines];
+    
     fp = fopen(filename, "r");
     while( ( check = fscanf(fp, "%d %d %d", &pid, &arrival_time, &burst_time) ) != EOF) {
         if( check == 3 ) {
+            //printf("%d %d %d\n", pid, arrival_time, burst_time);
             file[0][i] = pid;
             file[1][i] = arrival_time;
             file[2][i] = burst_time;
+            //printf("%d %d %d\n", file[0][i], file[1][i], file[2][i]);
             i += 1;
         }
         else{
@@ -68,14 +69,17 @@ int main(int argc, char **argv){
     }
     fclose(fp);
 
-    /* Prints the array */
+    /* Prints the array
     i = 0;
-    while( i <= lines ) {
+    while( i < lines ) {
         printf("%d %d %d\n", file[0][i], file[1][i], file[2][i]);
         i++;
-    }
+    }*/
+    ///////////////////////////////////////////////////
+    /* This is where the fun begins.
+       A random Star Wars quote.
+       Yes, I like prequels and dont judge me for that.*/
 
-    /* Structure for operation of the scheduler. Don't need to touch this. */
     if( argc == 3 && !strcmp(argv[2], "FCFS") ) {
         printf("Scheduling Algorithm: %s\n", argv[2]);
         /*int time = 0;

@@ -69,19 +69,19 @@ void rem(){
     if(rear == -1){
         front = -1;
     }
-    
+
     return;
 }
 
 void disp(){
     int i = 0;
-    if(front == -1 && rear == -1){
+    if (front == -1 && rear == -1) {
         printf("Queue is empty!!\n");
         return;
     }
     else{
         front = 0;
-        while(i <= rear){
+        while (i <= rear) {
             printf("%d %d %d %d -> ", pq[i][0], pq[i][1], pq[i][2], pq[i][3]);
             i += 1;
         }
@@ -98,11 +98,11 @@ int isdigit2(char *s) {
     unsigned int i = 0;
     unsigned int n = strlen(s);
     int sum = 0;
-    for(;i < n; i++){
+    for (;i < n; i++) {
         if( s[i] > '0' && s[i] < '9') {
             sum = sum * 10 + (s[i] - '0');
         }
-        else{
+        else {
             return -1;
         }
     }
@@ -139,7 +139,7 @@ int main(int argc, char **argv){
     
     fp = fopen(filename, "r");
     while( ( check = fscanf(fp, "%d %d %d", &pid, &arrival_time, &burst_time) ) != EOF) {
-        if( check == 3 ) {
+        if ( check == 3 ) {
             //printf("%d %d %d\n", pid, arrival_time, burst_time);
             file[0][i] = pid;
             file[1][i] = arrival_time;
@@ -147,7 +147,7 @@ int main(int argc, char **argv){
             //printf("%d %d %d\n", file[0][i], file[1][i], file[2][i]);
             i += 1;
         }
-        else{
+        else {
             printf("File corrupted!!\n");
             return -1;
         }
@@ -165,17 +165,16 @@ int main(int argc, char **argv){
        A random Star Wars quote.
        Yes, I like prequels and dont judge me for that.*/
 
-    if( argc == 3 && !strcmp(argv[2], "FCFS") ) {
-        printf("Scheduling Algorithm: %s\n", argv[2]);
-        
-    }
-    else if( argc == 3 && !strcmp(argv[2], "SJF") ) {
+    if ( argc == 3 && !strcmp(argv[2], "FCFS") ) {
         printf("Scheduling Algorithm: %s\n", argv[2]);
     }
-    else if( argc == 4 && !strcmp(argv[2], "RR") && (slice > 0) ) {
+    else if ( argc == 3 && !strcmp(argv[2], "SJF") ) {
+        printf("Scheduling Algorithm: %s\n", argv[2]);
+    }
+    else if ( argc == 4 && !strcmp(argv[2], "RR") && (slice > 0) ) {
         printf("Scheduling Algorithm: %s with time-slice of %d ms\n", argv[2], slice);
     }
-    else{
+    else {
         printf("Wrong input format:\n");
         printf("./scheduler <filename> <FCFS|SJF|RR> <quantum(only positive integers)>\n");
         return -1;

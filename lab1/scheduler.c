@@ -4,15 +4,84 @@
 #include <math.h>
 #include <stdlib.h>
 
-void insert_by_priority(int n1, int n2, int n3, int p);
-void delete_top();
-void create();
-void check(int n1, int n2, int n3, int p);
-void display_pqueue();
-//void display_pqueue();
+int pq[INT16_MAX][4];
+int front;
+int rear;
 
-int pq[4][INT16_MAX] = {0};
-int front, rear;
+void create(){
+    front = -1;
+    rear = -1;
+    return;
+}
+
+void insert(int n1, int n2, int n3, int p){
+    front = 0;
+    if (front == -1 && rear == -1) {
+        pq[rear][0] = n1;
+        pq[rear][1] = n2;
+        pq[rear][2] = n3;
+        pq[rear][3] = p;
+        rear += 1;
+        return;
+    }
+    else{
+        int i;
+        i = rear;
+        int j = 0;
+        printf("Else : \n");
+        printf("i %d\n",i);
+        while (p > pq[i][3] && i >= 0) {
+            pq[i+1][0] = pq[i][0];
+            pq[i+1][1] = pq[i][1];
+            pq[i+1][2] = pq[i][2];
+            pq[i+1][3] = pq[i][3];
+            i -= 1;
+        }
+        i += 1;
+        pq[i][0] = n1;
+        pq[i][1] = n2;
+        pq[i][2] = n3;
+        pq[i][3] = p;
+        rear += 1;
+        return;
+    }
+}
+
+void rem(){
+    int i = rear;
+    front = 0;
+
+    while (i > 0) {
+        pq[i-1][0] = pq[i][0];
+        pq[i-1][1] = pq[i][1];
+        pq[i-1][2] = pq[i][2];
+        pq[i-1][3] = pq[i][3];
+        i-=1;
+    }
+    pq[rear][0] = 0;
+    pq[rear][1] = 0;
+    pq[rear][2] = 0;
+    pq[rear][3] = 0;
+    rear -= 1;
+    return;
+}
+
+void disp(){
+    int i = 0;
+    if(front == -1 && rear == -1){
+        printf("Queue is empty!!\n");
+        return;
+    }
+    else{
+        front = 0;
+        while(i <= rear){
+            printf("%d %d %d %d -> ", pq[i][0], pq[i][1], pq[i][2], pq[i][3]);
+            i += 1;
+        }
+        printf("\n");
+        return;
+    }
+}
 
 int isdigit2(char *s) {
     /* Convert a character array into integer,
@@ -110,132 +179,34 @@ int main(int argc, char **argv){
     create();
     printf("\n");
     printf("front rear: %d %d\n", front, rear);
-    insert_by_priority(1,1,1,1);
+    insert(1,1,1,1);
     printf("front rear: %d %d\n", front, rear);
-    display_pqueue();
+    disp();
     printf("\n");
-    insert_by_priority(4,2,3,4);
+    insert(4,2,3,4);
     printf("front rear: %d %d\n", front, rear);
-    display_pqueue();
+    disp();
     printf("\n");
-    insert_by_priority(2,3,1,3);
+    insert(2,3,1,3);
     printf("front rear: %d %d\n", front, rear);
-    display_pqueue();
+    disp();
     printf("\n");
 
-    delete_top();
+    rem();
     printf("front rear: %d %d\n", front, rear);
-    display_pqueue();
+    disp();
     printf("\n");
-    delete_top();
+    rem();
     printf("front rear: %d %d\n", front, rear);
-    display_pqueue();
+    disp();
     printf("\n");
-    delete_top();
+    rem();
     printf("front rear: %d %d\n", front, rear);
-    display_pqueue();
+    disp();
     printf("\n");
     printf("front rear: %d %d\n", front, rear);
     /////////////////////////
 
 
     return 0;
-}
-
-void create()
-{
-    front = -1;
-    rear = -1;
-}
-
-void insert_by_priority(int n1, int n2, int n3, int p)
-{
-    if( rear >= INT16_MAX - 1 )
-    {
-        printf("\nToo many processes.");
-        return;
-    }
-    if( (front == -1) && (rear == -1) )
-    {
-        printf("in front = -1 and rear = -1 condition\n");
-        front = 0;
-        rear = 0;
-        pq[0][rear] = n1;
-        pq[1][rear] = n2;
-        pq[2][rear] = n3;
-        pq[4][rear] = p;
-        printf("returning successfully\n");
-        return;
-    }
-    else{
-        printf("going to check\n");
-        check(n1, n2, n3, p);
-        printf("returned from check\n");
-        rear++;
-    }
-    return;
-}
-
-void check(int n1, int n2, int n3, int p)
-{
-    int i, j;
-
-    for( i = 0; i <= rear; i += 1 ) {
-        if( p >= pq[4][i] ) {
-            for ( j = rear + 1; j > i; j -= 1 ) {
-                pq[0][j] = pq[0][j-1];
-                pq[1][j] = pq[1][j-1];
-                pq[2][j] = pq[2][j-1];
-                pq[3][j] = pq[3][j-1];
-            }
-            pq[0][i] = n1;
-            pq[1][i] = n2;
-            pq[2][i] = n3;
-            pq[3][i] = p;
-            return;
-        }
-    }
-    pq[0][i] = n1;
-    pq[1][i] = n2;
-    pq[2][i] = n3;
-    pq[3][i] = p;
-    return;
-}
-
-void delete_top(){
-    int i;
-    for( i = 0; i < rear; i+= 1 ) {
-        pq[0][i] = pq[0][i+1];
-        pq[1][i] = pq[1][i+1];
-        pq[2][i] = pq[2][i+1];
-        pq[3][i] = pq[3][i+1];
-    }
-    pq[0][rear] = 0;
-    pq[1][rear] = 0;
-    pq[2][rear] = 0;
-    pq[3][rear] = 0;
-    rear -= 1;
-
-    if( rear == -1 ) {
-        front = -1;
-    }
-    return;
-}
-
-void display_pqueue()
-{
-    if ((front == -1) && (rear == -1))
-    {
-        printf("\nQueue is empty");
-        return;
-    }
-
-    int i;
-    for (i = front; i <= rear; i+=1)
-    {
-        printf("%d %d %d %d ,", pq[0][i], pq[1][i], pq[2][i], pq[3][i]);
-    }
-
-    printf("queue finished\n");
-    return;
 }

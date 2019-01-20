@@ -4,6 +4,10 @@
 #include <math.h>
 #include <stdlib.h>
 
+
+/* Here is a bad implementation of queue
+   where important pointers like front and
+   rear are just hanging around */
 int pq[INT16_MAX][4];
 int front;
 int rear;
@@ -61,6 +65,11 @@ void rem(){
     pq[rear][2] = 0;
     pq[rear][3] = 0;
     rear -= 1;
+
+    if(rear == -1){
+        front = -1;
+    }
+    
     return;
 }
 

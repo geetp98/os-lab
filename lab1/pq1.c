@@ -110,5 +110,7 @@ int main(){
     disp();
     insert(1, 4, 6, 7);
     disp();
+    insert(8, 7, 6, 6);
+    disp();
     return 0;
 }

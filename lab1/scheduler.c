@@ -28,8 +28,6 @@ void insert(int n1, int n2, int n3, int p){
         int i;
         i = rear;
         int j = 0;
-        printf("Else : \n");
-        printf("i %d\n",i);
         while (p > pq[i][3] && i >= 0) {
             pq[i+1][0] = pq[i][0];
             pq[i+1][1] = pq[i][1];
@@ -106,7 +104,7 @@ int main(int argc, char **argv){
     
     ///////////////////////////////////////////////////
     /* input methods until line 87. Don't touch before that.*/
-    /*int check = 0;
+    int check = 0;
     int i = 0;
     int lines = 0;
     char c;
@@ -114,10 +112,10 @@ int main(int argc, char **argv){
     int slice;
     if( argc == 4 ){
         slice = isdigit2(argv[3]);
-    }*/
+    }
 
     /* Convert a suitable file into an array of integers */
-    /*int pid, arrival_time, burst_time;
+    int pid, arrival_time, burst_time;
     char *filename = argv[1];
     FILE *fp;
     fp = fopen(filename, "r");
@@ -145,7 +143,7 @@ int main(int argc, char **argv){
             return -1;
         }
     }
-    fclose(fp);*/
+    fclose(fp);
 
     /* Prints the array
     i = 0;
@@ -158,7 +156,7 @@ int main(int argc, char **argv){
        A random Star Wars quote.
        Yes, I like prequels and dont judge me for that.*/
 
-    /*if( argc == 3 && !strcmp(argv[2], "FCFS") ) {
+    if( argc == 3 && !strcmp(argv[2], "FCFS") ) {
         printf("Scheduling Algorithm: %s\n", argv[2]);
         
     }
@@ -172,41 +170,27 @@ int main(int argc, char **argv){
         printf("Wrong input format:\n");
         printf("./scheduler <filename> <FCFS|SJF|RR> <quantum(only positive integers)>\n");
         return -1;
-    }*/
+    }
 
     /////////////////////////
-    /* this place is reserved for queue. do not mess*/
+    /* this place is reserved for queue. do not mess
     create();
-    printf("\n");
-    printf("front rear: %d %d\n", front, rear);
-    insert(1,1,1,1);
-    printf("front rear: %d %d\n", front, rear);
     disp();
-    printf("\n");
-    insert(4,2,3,4);
-    printf("front rear: %d %d\n", front, rear);
+    insert(1, 2, 3, 4);
     disp();
-    printf("\n");
-    insert(2,3,1,3);
-    printf("front rear: %d %d\n", front, rear);
+    insert(1, 3, 5, 5);
     disp();
-    printf("\n");
-
+    insert(1, 4, 6, 7);
+    disp();
     rem();
-    printf("front rear: %d %d\n", front, rear);
     disp();
-    printf("\n");
     rem();
-    printf("front rear: %d %d\n", front, rear);
     disp();
-    printf("\n");
-    rem();
-    printf("front rear: %d %d\n", front, rear);
+    insert(1, 4, 6, 7);
     disp();
-    printf("\n");
-    printf("front rear: %d %d\n", front, rear);
-    /////////////////////////
-
+    insert(8, 7, 6, 6);
+    disp();
+    /////////////////////////*/
 
     return 0;
 }

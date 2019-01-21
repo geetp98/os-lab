@@ -73,6 +73,13 @@ void rem(){
     return;
 }
 
+bool isqempty(){
+    if(front == -1 && rear == -1){
+        return true;
+    }
+    return false;
+}
+
 void disp(){
     int i = 0;
     if (front == -1 && rear == -1) {
@@ -112,10 +119,10 @@ int isdigit2(char *s) {
 int main(int argc, char **argv){
     
     ///////////////////////////////////////////////////
-    /* input methods until line 87. Don't touch before that.*/
+    /* input filtering until line **insert something. Don't touch before that.*/
     int check = 0;
     int i = 0;
-    int lines = 0;
+    int lines = 1;
     char c;
 
     int slice;
@@ -134,10 +141,10 @@ int main(int argc, char **argv){
         }
     }
     fclose(fp);
+    printf("lines %d\n", lines);
 
-    int file[3][lines];
-    
     fp = fopen(filename, "r");
+    int file[3][lines];
     while( ( check = fscanf(fp, "%d %d %d", &pid, &arrival_time, &burst_time) ) != EOF) {
         if ( check == 3 ) {
             //printf("%d %d %d\n", pid, arrival_time, burst_time);
@@ -153,9 +160,9 @@ int main(int argc, char **argv){
         }
     }
     fclose(fp);
-
-    /* Prints the array
-    i = 0;
+    printf("Total %d tasks read from %s. Now starting with scheduling algorithm %s\n", lines, argv[1], argv[2]);
+    
+    /*i = 0;
     while( i < lines ) {
         printf("%d %d %d\n", file[0][i], file[1][i], file[2][i]);
         i++;
@@ -166,13 +173,30 @@ int main(int argc, char **argv){
        Yes, I like prequels and dont judge me for that.*/
 
     if ( argc == 3 && !strcmp(argv[2], "FCFS") ) {
-        printf("Scheduling Algorithm: %s\n", argv[2]);
+        i = 0;
+        create();
+        while (i < lines) {
+            insert(file[0][i], file[1][i], file[2][i], -1*file[1][i]);
+            i += 1;
+        }
+        /*
+        int time_;
+        int systime = 0;
+        while (!isqempty()) {
+            disp();
+            time_ = pq[front][2];
+            while (time_ > 0) {
+                systime += 1;
+                printf("<system time %d> process %d is running..\n", systime, pq[front][0]);
+                time_ -= 1;
+            }
+            printf("<system time %d> process %d is finished.\n", systime, pq[front][0]);
+            rem();
+        }*/
     }
     else if ( argc == 3 && !strcmp(argv[2], "SJF") ) {
-        printf("Scheduling Algorithm: %s\n", argv[2]);
     }
     else if ( argc == 4 && !strcmp(argv[2], "RR") && (slice > 0) ) {
-        printf("Scheduling Algorithm: %s with time-slice of %d ms\n", argv[2], slice);
     }
     else {
         printf("Wrong input format:\n");
@@ -181,11 +205,13 @@ int main(int argc, char **argv){
     }
 
     /////////////////////////
-    /* this place is reserved for queue. do not mess
+    /* this place is reserved for queue. do not mess 
     create();
+    printf("%d\n",isqempty());
     disp();
     insert(1, 2, 3, 4);
     disp();
+    printf("%d\n",isqempty());
     insert(1, 3, 5, 5);
     disp();
     insert(1, 4, 6, 7);
@@ -198,7 +224,14 @@ int main(int argc, char **argv){
     disp();
     insert(8, 7, 6, 6);
     disp();
-    /////////////////////////*/
+    rem();
+    disp();
+    rem();
+    disp();
+    rem();
+    disp();
+    printf("%d\n",isqempty());*/
+    /////////////////////////
 
     return 0;
 }

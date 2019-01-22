@@ -182,12 +182,17 @@ int main(int argc, char **argv){
         int systime = 0;
         while(!isqempty()){
             int time_left = pq[front][2];
-            while(time_left > 0){
+            int next_arrival_time = pq[front+1][1];
+            while( time_left > 0 ){
                 printf("<system time %d> process %d running..\n", systime, pq[front][0]);
                 systime += 1;
                 time_left -= 1;
             }
             printf("<system time %d> process %d finished......\n", systime, pq[front][0]);
+            while ( next_arrival_time > systime ) {
+                systime+=1;
+                printf("<system time %d> waiting for a process\n", systime);
+            }
             rem();
         }
     }

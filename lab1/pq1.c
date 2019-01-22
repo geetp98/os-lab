@@ -44,15 +44,14 @@ void insert(int n1, int n2, int n3, int p){
 }
 
 void rem(){
-    int i = rear;
-    front = 0;
+    int i = front;
 
-    while (i > 0) {
-        pq[i-1][0] = pq[i][0];
-        pq[i-1][1] = pq[i][1];
-        pq[i-1][2] = pq[i][2];
-        pq[i-1][3] = pq[i][3];
-        i-=1;
+    while (i != rear) {
+        pq[i][0] = pq[i+1][0];
+        pq[i][1] = pq[i+1][1];
+        pq[i][2] = pq[i+1][2];
+        pq[i][3] = pq[i+1][3];
+        i+=1;
     }
     pq[rear][0] = 0;
     pq[rear][1] = 0;

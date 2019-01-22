@@ -50,15 +50,15 @@ void insert(int n1, int n2, int n3, int p){
 }
 
 void rem(){
-    int i = rear;
-    front = 0;
+    int i = front;
 
-    while (i > 0) {
-        pq[i-1][0] = pq[i][0];
-        pq[i-1][1] = pq[i][1];
-        pq[i-1][2] = pq[i][2];
-        pq[i-1][3] = pq[i][3];
-        i-=1;
+    while (i != rear) {
+        //printf("i %d\n", i);
+        pq[i][0] = pq[i+1][0];
+        pq[i][1] = pq[i+1][1];
+        pq[i][2] = pq[i+1][2];
+        pq[i][3] = pq[i+1][3];
+        i+=1;
     }
     pq[rear][0] = 0;
     pq[rear][1] = 0;
@@ -141,17 +141,14 @@ int main(int argc, char **argv){
         }
     }
     fclose(fp);
-    printf("lines %d\n", lines);
 
     fp = fopen(filename, "r");
     int file[3][lines];
     while( ( check = fscanf(fp, "%d %d %d", &pid, &arrival_time, &burst_time) ) != EOF) {
         if ( check == 3 ) {
-            //printf("%d %d %d\n", pid, arrival_time, burst_time);
             file[0][i] = pid;
             file[1][i] = arrival_time;
             file[2][i] = burst_time;
-            //printf("%d %d %d\n", file[0][i], file[1][i], file[2][i]);
             i += 1;
         }
         else {
@@ -160,7 +157,10 @@ int main(int argc, char **argv){
         }
     }
     fclose(fp);
-    printf("Total %d tasks read from %s. Now starting with scheduling algorithm %s\n", lines, argv[1], argv[2]);
+
+    printf("Scheduling algorithm: %s\n", argv[2]);
+    printf("Total %d tasks read from %s. Now starting...\n", lines, argv[1]);
+    printf("==============================================\n");
     
     /*i = 0;
     while( i < lines ) {
@@ -179,20 +179,17 @@ int main(int argc, char **argv){
             insert(file[0][i], file[1][i], file[2][i], -1*file[1][i]);
             i += 1;
         }
-        /*
-        int time_;
         int systime = 0;
-        while (!isqempty()) {
-            disp();
-            time_ = pq[front][2];
-            while (time_ > 0) {
+        while(!isqempty()){
+            int time_left = pq[front][2];
+            while(time_left > 0){
+                printf("<system time %d> process %d running..\n", systime, pq[front][0]);
                 systime += 1;
-                printf("<system time %d> process %d is running..\n", systime, pq[front][0]);
-                time_ -= 1;
+                time_left -= 1;
             }
-            printf("<system time %d> process %d is finished.\n", systime, pq[front][0]);
+            printf("<system time %d> process %d finished......\n", systime, pq[front][0]);
             rem();
-        }*/
+        }
     }
     else if ( argc == 3 && !strcmp(argv[2], "SJF") ) {
     }

@@ -235,9 +235,13 @@ int main(int argc, char **argv){
                 last_add += 1;
                 j += 1;
             }
-            printf("%d processes added at systime %d\n", j, systime);
+            if ( j != 0 ){
+                printf("%d processes added at systime %d\n", j, systime);
+            }
+            pq[front][2] -= 1;
             systime += 1;
-            if (last_add > lines) {
+            if (last_add >= lines) {
+                printf("break\n");
                 break;
             }
         }

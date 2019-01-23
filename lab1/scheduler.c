@@ -227,7 +227,6 @@ int main(int argc, char **argv){
         int systime = 0;
         int last_add = 0;
         while (true) {
-            //j = 0;
             while ( file[1][last_add] == systime ) {
                 insert(file[0][last_add], file[1][last_add], file[2][last_add], -1*file[2][last_add]);
                 last_add += 1;

@@ -73,10 +73,10 @@ void rem(){
     return;
 }
 
-void reprioritize(int systime, int virtual_rear) {
+void reprioritize() {
     int i = front;
-    while ( i != virtual_rear ) {
-        if ( pq[i][3] < pq[i+1][3] && systime >= pq[i][1]) {
+    while ( i != rear ) {
+        if ( pq[i][3] < pq[i+1][3]) {
             int temp = pq[i][0];
             pq[i][0] = pq[i+1][0];
             pq[i+1][0] = temp;
@@ -226,23 +226,28 @@ int main(int argc, char **argv){
         create();
         int systime = 0;
         int last_add = 0;
-        int j;
         while (true) {
-            j = 0;
+            //j = 0;
             while ( file[1][last_add] == systime ) {
                 insert(file[0][last_add], file[1][last_add], file[2][last_add], -1*file[2][last_add]);
-                disp();
                 last_add += 1;
-                j += 1;
-            }
-            if ( j != 0 ){
-                printf("%d processes added at systime %d\n", j, systime);
             }
             pq[front][2] -= 1;
+            pq[front][3] += 1;
             systime += 1;
-            if (last_add >= lines) {
-                printf("break\n");
+            if ( pq[front][2] == 0 ) {
+                printf("<system time %d> process %d finished......\n", systime, pq[front][0]);
+                rem();
+            }
+            else if ( !isqempty() ) {
+                printf("<system time %d> process %d running..\n", systime, pq[front][0]);
+            }
+            reprioritize();
+            if ( isqempty() && last_add >= lines) {
                 break;
+            }
+            else if ( isqempty() && last_add < lines ) {
+                printf("<system time %d> waiting for a process\n", systime);
             }
         }
     }

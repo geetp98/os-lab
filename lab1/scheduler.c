@@ -73,6 +73,31 @@ void rem(){
     return;
 }
 
+void reprioritize(int systime, int virtual_rear) {
+    int i = front;
+    while ( i != virtual_rear ) {
+        if ( pq[i][3] < pq[i+1][3] && systime >= pq[i][1]) {
+            int temp = pq[i][0];
+            pq[i][0] = pq[i+1][0];
+            pq[i+1][0] = temp;
+
+            temp = pq[i][1];
+            pq[i][1] = pq[i+1][1];
+            pq[i+1][1] = temp;
+
+            temp = pq[i][2];
+            pq[i][2] = pq[i+1][2];
+            pq[i+1][2] = temp;
+
+            temp = pq[i][3];
+            pq[i][3] = pq[i+1][3];
+            pq[i+1][3] = temp;
+        }
+        i += 1;
+    }
+    return;
+}
+
 bool isqempty(){
     if(front == -1 && rear == -1){
         return true;
@@ -180,7 +205,7 @@ int main(int argc, char **argv){
             i += 1;
         }
         int systime = 0;
-        while(!isqempty()){
+        while ( !isqempty() ) {
             int time_left = pq[front][2];
             int next_arrival_time = pq[front+1][1];
             while( time_left > 0 ){
@@ -190,13 +215,32 @@ int main(int argc, char **argv){
             }
             printf("<system time %d> process %d finished......\n", systime, pq[front][0]);
             while ( next_arrival_time > systime ) {
-                systime+=1;
+                systime += 1;
                 printf("<system time %d> waiting for a process\n", systime);
             }
             rem();
         }
     }
     else if ( argc == 3 && !strcmp(argv[2], "SJF") ) {
+        i = 0;
+        create();
+        int systime = 0;
+        int last_add = 0;
+        int j;
+        while (true) {
+            j = 0;
+            while ( file[1][last_add] == systime ) {
+                insert(file[0][last_add], file[1][last_add], file[2][last_add], -1*file[2][last_add]);
+                disp();
+                last_add += 1;
+                j += 1;
+            }
+            printf("%d processes added at systime %d\n", j, systime);
+            systime += 1;
+            if (last_add > lines) {
+                break;
+            }
+        }
     }
     else if ( argc == 4 && !strcmp(argv[2], "RR") && (slice > 0) ) {
     }

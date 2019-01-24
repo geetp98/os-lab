@@ -9,22 +9,21 @@ struct process{
     int pid;
     int arr_time;
     int burst_time;
+
+    process():pid(0), arr_time(0), burst_time(0)
+    {
+    }
 };
 
-bool Comapare_fcfs(process p1, process p2)
-{
-    return p1.arr_time > p2.arr_time;
-}
-bool Compare_sjf(process p1, process p2)
-{
-    /* work */
-    return true;
-}
-bool Compare_rr(process p1, process p2)
-{
-    /* work */
-    return true;
-}
+struct CompareFCFS{
+    bool operator()(process const& p1, process const& p2)
+    {
+        // return "true" if "p1" is ordered
+        // before "p2", for example:
+        return p1.arr_time < p2.arr_time;
+    }
+};
+
 
 int isdigit2(char *s) {
     /* Convert a character array into integer,
@@ -89,14 +88,14 @@ int main(int argc, char **argv){
     cout << "==============================================" << endl;
 
     if ( argc == 3 && !strcmp(argv[2], "FCFS") ) {
-        queue<process> myq;
+        priority_queue<process, vector<process>, CompareFCFS> myq;
         int systime  = 0;
         int last_add = 0;
         while(true){
             while ( file[1][last_add] == systime ) {
                 process p1;
                 p1.pid = file[0][last_add]; p1.arr_time = file[1][last_add]; p1.burst_time = file[2][last_add];
-
+                myq.push(p1);
                 last_add += 1;
             }
         }

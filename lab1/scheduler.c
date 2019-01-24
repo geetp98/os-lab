@@ -25,6 +25,9 @@ void createq(){
 }
 
 void insert(int n1, int n2, int n3, int p){
+    if ( n1 == 0 ) {
+        return;
+    }
     if (front == -1 && rear == -1) {
         rear += 1;
         front += 1;
@@ -54,7 +57,10 @@ void insert(int n1, int n2, int n3, int p){
         return;
     }
 }
-void insertq(int n1, int n2, int n3){
+void insertq(int n1, int n2, int n3) {
+    if ( n1 == 0 ) {
+        return;
+    }
     if (front1 == -1 && rear1 == -1) {
         rear1 += 1;
         front1 += 1;
@@ -73,7 +79,24 @@ void insertq(int n1, int n2, int n3){
 }
 
 
+bool ispqempty(){
+    if(front == -1 && rear == -1){
+        return true;
+    }
+    return false;
+}
+bool isqempty(){
+    if(front1 == -1 && rear1 == -1){
+        return true;
+    }
+    return false;
+}
+
+
 void rem(){
+    if( ispqempty() ){
+        return;
+    }
     int i = front;
     while (i != rear) {
         pq[i][0] = pq[i+1][0];
@@ -94,6 +117,9 @@ void rem(){
     return;
 }
 void remq(){
+    if( isqempty() ){
+        return;
+    }
     int i = front1;
     while (i != rear1){
         q[i][0] = q[i+1][0];
@@ -138,18 +164,6 @@ void reprioritize() {
     return;
 }
 
-bool ispqempty(){
-    if(front == -1 && rear == -1){
-        return true;
-    }
-    return false;
-}
-bool isqempty(){
-    if(front1 == -1 && rear1 == -1){
-        return true;
-    }
-    return false;
-}
 
 void disp(){
     int i = 0;
@@ -207,7 +221,7 @@ int isdigit2(char *s) {
 int main(int argc, char **argv){
     
     ///////////////////////////////////////////////////
-    /* input filtering until line **insert something. Don't touch before that.*/
+    /* input filtering until line *insert something*. Don't touch before that.*/
     int check = 0;
     int i = 0;
     int lines = 1;
@@ -291,12 +305,14 @@ int main(int argc, char **argv){
         int last_add = 0;
         while (true) {
             while ( file[1][last_add] == systime ) {
+                int k = rear;
                 insert(file[0][last_add], file[1][last_add], file[2][last_add], -1*file[2][last_add]);
-                last_add += 1;
+                printf("systime %d : ", systime);
+                disp();
+                if ( k + 1 == rear ){
+                    last_add += 1;
+                }
             }
-            pq[front][2] -= 1;
-            pq[front][3] += 1;
-            systime += 1;
             if ( pq[front][2] == 0 ) {
                 printf("<system time %d> process %d finished......\n", systime, pq[front][0]);
                 rem();
@@ -304,15 +320,16 @@ int main(int argc, char **argv){
             else if ( !ispqempty() ) {
                 printf("<system time %d> process %d running..\n", systime, pq[front][0]);
             }
-            reprioritize();
-            if ( ispqempty() ){
-                if ( last_add >= lines ){
-                    break;
-                }
-                else if ( last_add < lines ) {
-                    printf("<system time %d> waiting for a process\n", systime);;
-                }
+            if ( ispqempty() && last_add == lines) {
+                break;
             }
+            else if ( ispqempty() && last_add < lines ) {
+                printf("<system time %d> waiting for a process\n", systime);
+            }
+            pq[front][2] -= 1;
+            pq[front][3] += 1;
+            reprioritize();
+            systime += 1;
         }
     }
     else if ( argc == 4 && !strcmp(argv[2], "RR") && (slice > 0) ) {
@@ -322,13 +339,17 @@ int main(int argc, char **argv){
         int count = 0;
         while (true) {
             while ( file[1][last_add] == systime ) {
+                int k = rear1;
                 insertq(file[0][last_add], file[1][last_add], file[2][last_add]);
-                last_add += 1;
+                printf("systime %d : ", systime);
+                dispq();
+                if ( k + 1 == rear1 ){
+                    last_add += 1;
+                }
             }
             i = 0;
             q[front1][2] -= 1;
             count += 1;
-            systime += 1;
             if ( q[front1][2] == 0 ){
                 printf("<system time %d> process %d finished......\n", systime, q[front1][0]);
                 count = 0;
@@ -349,6 +370,7 @@ int main(int argc, char **argv){
             else if ( isqempty() && last_add < lines ) {
                 printf("<system time %d> waiting for a process\n", systime);
             }
+            systime += 1;
         }
     }
     else {

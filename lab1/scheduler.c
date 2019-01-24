@@ -305,17 +305,51 @@ int main(int argc, char **argv){
                 printf("<system time %d> process %d running..\n", systime, pq[front][0]);
             }
             reprioritize();
-            if ( ispqempty() && last_add >= lines) {
-                break;
-            }
-            else if ( ispqempty() && last_add < lines ) {
-                printf("<system time %d> waiting for a process\n", systime);
+            if ( ispqempty() ){
+                if ( last_add >= lines ){
+                    break;
+                }
+                else if ( last_add < lines ) {
+                    printf("<system time %d> waiting for a process\n", systime);;
+                }
             }
         }
     }
     else if ( argc == 4 && !strcmp(argv[2], "RR") && (slice > 0) ) {
-        i = 0;
+        createq();
+        int systime = 0;
+        int last_add = 0;
+        int count = 0;
+        while (true) {
+            while ( file[1][last_add] == systime ) {
+                insertq(file[0][last_add], file[1][last_add], file[2][last_add]);
+                last_add += 1;
+            }
+            i = 0;
+            q[front1][2] -= 1;
+            count += 1;
+            systime += 1;
+            if ( q[front1][2] == 0 ){
+                printf("<system time %d> process %d finished......\n", systime, q[front1][0]);
+                count = 0;
+                remq();
+            }
+            else if ( count == slice ){
+                insertq(q[front1][0], q[front1][1], q[front1][2]);
+                remq();
+                count = 0;
+            }
 
+            if ( !isqempty() ) {
+                printf("<system time %d> process %d running..\n", systime, q[front][0]);
+            }
+            if ( isqempty() && last_add >= lines) {
+                break;
+            }
+            else if ( isqempty() && last_add < lines ) {
+                printf("<system time %d> waiting for a process\n", systime);
+            }
+        }
     }
     else {
         printf("Wrong input format:\n");

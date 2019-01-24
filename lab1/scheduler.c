@@ -9,23 +9,29 @@
    where important pointers like front and
    rear are just hanging around */
 int pq[INT16_MAX][4];
-int front;
-int rear;
+int q[INT16_MAX][3];
+int front, front1;
+int rear, rear1;
 
 void create(){
     front = -1;
     rear = -1;
     return;
 }
+void createq(){
+    front1 = -1;
+    rear1 = -1;
+    return;
+}
 
 void insert(int n1, int n2, int n3, int p){
-    front = 0;
     if (front == -1 && rear == -1) {
+        rear += 1;
+        front += 1;
         pq[rear][0] = n1;
         pq[rear][1] = n2;
         pq[rear][2] = n3;
         pq[rear][3] = p;
-        rear += 1;
         return;
     }
     else{
@@ -48,12 +54,28 @@ void insert(int n1, int n2, int n3, int p){
         return;
     }
 }
+void insertq(int n1, int n2, int n3){
+    if (front1 == -1 && rear1 == -1) {
+        rear1 += 1;
+        front1 += 1;
+        q[0][0] = n1;
+        q[0][1] = n2;
+        q[0][2] = n3;
+        return;
+    }
+    else{
+        rear1 += 1;
+        q[rear1][0] = n1;
+        q[rear1][1] = n2;
+        q[rear1][2] = n3;
+        return;
+    }
+}
+
 
 void rem(){
     int i = front;
-
     while (i != rear) {
-        //printf("i %d\n", i);
         pq[i][0] = pq[i+1][0];
         pq[i][1] = pq[i+1][1];
         pq[i][2] = pq[i+1][2];
@@ -69,9 +91,27 @@ void rem(){
     if(rear == -1){
         front = -1;
     }
-
     return;
 }
+void remq(){
+    int i = front1;
+    while (i != rear1){
+        q[i][0] = q[i+1][0];
+        q[i][1] = q[i+1][1];
+        q[i][2] = q[i+1][2];
+        i+=1;
+    }
+    q[rear1][0] = 0;
+    q[rear1][1] = 0;
+    q[rear1][2] = 0;
+    rear1 -= 1;
+
+    if(rear1 == -1){
+        front1 = -1;
+    }
+    return;
+}
+
 
 void reprioritize() {
     int i = front;
@@ -98,8 +138,14 @@ void reprioritize() {
     return;
 }
 
-bool isqempty(){
+bool ispqempty(){
     if(front == -1 && rear == -1){
+        return true;
+    }
+    return false;
+}
+bool isqempty(){
+    if(front1 == -1 && rear1 == -1){
         return true;
     }
     return false;
@@ -121,6 +167,23 @@ void disp(){
         return;
     }
 }
+void dispq(){
+    int i = 0;
+    if (front1 == -1 && rear1 == -1) {
+        printf("Queue is empty!!\n");
+        return;
+    }
+    else{
+        i = 0;
+        while (i <= rear1) {
+            printf("%d %d %d -> ", q[i][0], q[i][1], q[i][2]);
+            i += 1;
+        }
+        printf("\n");
+        return;
+    }
+}
+
 
 int isdigit2(char *s) {
     /* Convert a character array into integer,
@@ -205,7 +268,7 @@ int main(int argc, char **argv){
             i += 1;
         }
         int systime = 0;
-        while ( !isqempty() ) {
+        while ( !ispqempty() ) {
             int time_left = pq[front][2];
             int next_arrival_time = pq[front+1][1];
             while( time_left > 0 ){
@@ -238,19 +301,21 @@ int main(int argc, char **argv){
                 printf("<system time %d> process %d finished......\n", systime, pq[front][0]);
                 rem();
             }
-            else if ( !isqempty() ) {
+            else if ( !ispqempty() ) {
                 printf("<system time %d> process %d running..\n", systime, pq[front][0]);
             }
             reprioritize();
-            if ( isqempty() && last_add >= lines) {
+            if ( ispqempty() && last_add >= lines) {
                 break;
             }
-            else if ( isqempty() && last_add < lines ) {
+            else if ( ispqempty() && last_add < lines ) {
                 printf("<system time %d> waiting for a process\n", systime);
             }
         }
     }
     else if ( argc == 4 && !strcmp(argv[2], "RR") && (slice > 0) ) {
+        i = 0;
+
     }
     else {
         printf("Wrong input format:\n");
@@ -259,13 +324,13 @@ int main(int argc, char **argv){
     }
 
     /////////////////////////
-    /* this place is reserved for queue. do not mess 
-    create();
-    printf("%d\n",isqempty());
+    /* this place is reserved for queue. do not mess */
+    /*create();
+    printf("%d\n",ispqempty());
     disp();
     insert(1, 2, 3, 4);
     disp();
-    printf("%d\n",isqempty());
+    printf("%d\n",ispqempty());
     insert(1, 3, 5, 5);
     disp();
     insert(1, 4, 6, 7);
@@ -284,7 +349,18 @@ int main(int argc, char **argv){
     disp();
     rem();
     disp();
-    printf("%d\n",isqempty());*/
+    printf("%d\n",ispqempty());
+    createq();
+    dispq();
+    insertq(1,3,5);
+    dispq();
+    insertq(2,4,8);
+    dispq();
+    insertq(3,6,9);
+    dispq();
+    remq();
+    dispq();*/
+
     /////////////////////////
 
     return 0;

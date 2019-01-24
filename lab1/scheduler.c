@@ -375,7 +375,7 @@ int main(int argc, char **argv){
     }
     else {
         printf("Wrong input format:\n");
-        printf("./scheduler <filename> <FCFS|SJF|RR> <quantum(only positive integers)>\n");
+        printf("./scheduler <filename> <FCFS|SJF|RR> <quantum (only positive integers) (Only for RR)>\n");
         return -1;
     }
 

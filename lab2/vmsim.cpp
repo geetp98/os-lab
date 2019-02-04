@@ -22,7 +22,7 @@ int isdigit2(char *s) {
     unsigned int n = strlen(s);
     int sum = 0;
     for (;i < n; i++) {
-        if( s[i] > '0' && s[i] < '9') {
+        if( s[i] >='0' && s[i] <= '9') {
             sum = sum * 10 + (s[i] - '0');
         }
         else {
@@ -32,8 +32,8 @@ int isdigit2(char *s) {
     return sum;
 }
 
-int chosen_algo(char *s){
-    if(!strcmp(s, "opt")){
+int chosen_algo(char *s){       // returns appropriate integer with
+    if(!strcmp(s, "opt")){      // respect to input of algorithms
         return opt;
     }
     if(!strcmp(s, "fifo")){
@@ -42,15 +42,18 @@ int chosen_algo(char *s){
     if(!strcmp(s, "lru")){
         return lru;
     }
+    if(!strcmp(s, "anakin")){
+        cout << "I find your lack of faith disturbing." << endl;
+    }
     return -1;
 }
 
 int main(int argc, char** argv){
-    int  i = 0;
+    unsigned int i = 0;
 
     int physical_pfs = isdigit2(argv[1]);       // Number of physical page frames
     char* input__ = argv[2];                    // Name of the input file
-    int algo = chosen_algo(argv[3]);            // Number of the algorithm chosen. 1-opt, 2-fifo, 3-lru
+    int algo = chosen_algo(argv[3]);            // Number of the chosen one. 1-opt, 2-fifo, 3-lru, enter anakin for a surprise
     int verbose__ = isdigit2(argv[4]);          // verbose
 
     if(physical_pfs > 100 || physical_pfs < 1){
@@ -58,6 +61,9 @@ int main(int argc, char** argv){
         return 0;
     }
     if(algo == -1){
+        if(!strcmp(argv[3], "anakin")){
+            return 0;
+        }
         cout << "No algorithm named " << argv[3] << "\nPlease enter one of 'opt', 'fifo' or 'lru'" << endl;
         return 0;
     }
@@ -70,7 +76,6 @@ int main(int argc, char** argv){
     string line;
     myfile.open(input__);
     getline (myfile, line);
-    //cout << line << endl;
 
     vector<int> access_list(0,0);
     std::vector<int>::iterator it = access_list.begin();
@@ -81,9 +86,7 @@ int main(int argc, char** argv){
     while(i < line.size()){
         if(line[i] == ' '){
             total_access += 1;
-            //cout << isdigit2((char*)line.substr(prev, i - prev).c_str()) << endl;
             access_list.insert(access_list.end(), isdigit2((char*)line.substr(prev, i - prev).c_str()));
-            //std::copy(access_list.begin(), access_list.end(), std::ostream_iterator<int>(std::cout, " "));
             prev = i+1;
         }
         i += 1;

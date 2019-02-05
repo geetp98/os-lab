@@ -1,11 +1,12 @@
 #include <iostream>
-#include <stdlib.h>
+#include <iomanip>
 #include <fstream>
-#include <cstdlib>
 #include <vector>
 #include <string>
 #include <queue>
 #include <list>
+#include <stdbool.h>
+#include <stdlib.h>
 
 const int opt = 1;
 const int fifo = 2;
@@ -48,8 +49,36 @@ int chosen_algo(char *s){       // returns appropriate integer with
     return -1;
 }
 
+void print_queue(queue<int> q, int a){
+    cout << "[";
+    while(!q.empty()){
+        cout << q.front() << "|";
+        q.pop();
+        a -= 1;
+    }
+    while(a != 0){
+        cout << " |";
+        a -= 1;
+    }
+    cout << "\b]";
+    cout << endl;
+    return;
+}
+
+bool check_queue(int a, queue<int> q){
+    while(!q.empty()){
+        if(a == q.front()){
+            return true;
+        }
+        q.pop();
+    }
+    return false;
+}
+
 int main(int argc, char** argv){
     unsigned int i = 0;
+    std::cout << std::fixed;
+    std::cout << std::setprecision(2);
 
     int physical_pfs = isdigit2(argv[1]);       // Number of physical page frames
     char* input__ = argv[2];                    // Name of the input file
@@ -103,7 +132,7 @@ int main(int argc, char** argv){
     cout << "----------------------------------------" << endl;
     cout << "Starting now..." << endl;
     cout << "  Algorithm: " << argv[3] << endl;
-    cout << "  Physical page frames: " << physical_pfs << endl;
+    cout << "  Number of page frames: " << physical_pfs << endl;
     cout << "  Reading inputs from the file: " << input__ << endl;
     cout << "  Total inputs read: " << total_access << endl;
     cout << "  Input order: ";
@@ -115,17 +144,31 @@ int main(int argc, char** argv){
     else{
         cout << "  Verbose: Off" << endl;
     }
+    cout << "----------------------------------------" << endl;
 
     if(algo == 1){      // opt
-        return 0;
     }
     if(algo == 2){      // fifo
-        return 0;
+        queue<int> page_list;
+        int misses = 0;
+        while(access_list.size() != 0){
+            if(verbose__){cout << access_list.front() << ": ";}
+            if(!check_queue(access_list.front(), page_list)){
+                misses += 1;
+                page_list.push(access_list.front());
+                if(page_list.size() > physical_pfs){
+                    page_list.pop();
+                }
+            }
+            if(verbose__){print_queue(page_list, physical_pfs);}
+            access_list.erase(access_list.begin());
+        }
+        if(verbose__){cout << "----------------------------------------" << endl;}
+        cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
+        cout << "----------------------------------------" << endl;
     }
     if(algo == 3){      // lru
-        return 0;
     }
 
-    cout << "----------------------------------------" << endl;
     return 0;
 }

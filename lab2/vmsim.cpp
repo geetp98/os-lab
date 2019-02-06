@@ -65,7 +65,7 @@ void print_queue(queue<int> q, int a){
     return;
 }
 
-bool check_queue(int a, queue<int> q){
+bool check_queue(queue<int> q, int a){
     while(!q.empty()){
         if(a == q.front()){
             return true;
@@ -73,6 +73,34 @@ bool check_queue(int a, queue<int> q){
         q.pop();
     }
     return false;
+}
+
+void print_list(list<int> l, int a){
+    cout << "[";
+    a -= 1;
+    while(!l.empty()){
+        cout << l.front() << "|";
+        l.pop_front();
+        a -= 1;
+    }
+    while(a >= 0){
+        cout << " |";
+        a -= 1;
+    }
+    cout << "\b]";
+    cout << endl;
+    return;
+}
+
+int check_list(list<int> l, int a){
+    int index = 0;
+    while(!l.empty()){
+        if(a == l.front()){
+            return index;
+        }
+        l.pop_back();
+    }
+    return -1;
 }
 
 int main(int argc, char** argv){
@@ -148,12 +176,12 @@ int main(int argc, char** argv){
 
     if(algo == 1){      // opt
     }
-    if(algo == 2){      // fifo
+    else if(algo == 2){      // fifo:done
         queue<int> page_list;
         int misses = 0;
-        while(access_list.size() != 0){
+        while(access_list.size()){
             if(verbose__){cout << access_list.front() << ": ";}
-            if(!check_queue(access_list.front(), page_list)){
+            if( !check_queue(page_list, access_list.front()) ){
                 misses += 1;
                 page_list.push(access_list.front());
                 if(page_list.size() > physical_pfs){
@@ -167,7 +195,30 @@ int main(int argc, char** argv){
         cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
         cout << "----------------------------------------" << endl;
     }
-    if(algo == 3){      // lru
+    else if(algo == 3){      // lru:done
+        list<int> page_list;
+        int misses = 0;
+        int p;
+        while(access_list.size()){
+            if(verbose__){cout << access_list.front() << ": ";}
+            if( check_list(page_list, access_list.front()) == -1 ){
+                misses += 1;
+                if(page_list.size() >= physical_pfs){
+                    page_list.pop_front();
+                }
+                page_list.push_back(access_list.front());
+            }
+            else{
+                p = access_list.front();
+                page_list.remove(p);
+                page_list.push_back(p);
+            }
+            if(verbose__){print_list(page_list, physical_pfs);}
+            access_list.erase(access_list.begin());
+        }
+        if(verbose__){cout << "----------------------------------------" << endl;}
+        cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
+        cout << "----------------------------------------" << endl;
     }
 
     return 0;

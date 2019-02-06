@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -49,32 +50,6 @@ int chosen_algo(char *s){       // returns appropriate integer with
     return -1;
 }
 
-void print_queue(queue<int> q, int a){
-    cout << "[";
-    while(!q.empty()){
-        cout << q.front() << "|";
-        q.pop();
-        a -= 1;
-    }
-    while(a != 0){
-        cout << " |";
-        a -= 1;
-    }
-    cout << "\b]";
-    cout << endl;
-    return;
-}
-
-bool check_queue(queue<int> q, int a){
-    while(!q.empty()){
-        if(a == q.front()){
-            return true;
-        }
-        q.pop();
-    }
-    return false;
-}
-
 void print_list(list<int> l, int a){
     cout << "[";
     a -= 1;
@@ -92,15 +67,16 @@ void print_list(list<int> l, int a){
     return;
 }
 
-int check_list(list<int> l, int a){
-    int index = 0;
-    while(!l.empty()){
-        if(a == l.front()){
-            return index;
+int max_vector(vector<int> v){
+    int n;
+    int i = 1;
+    while(i < v.size()){
+        if(v[i] > v[i-1]){
+            n = v[i];
         }
-        l.pop_back();
+        i++;
     }
-    return -1;
+    return n;
 }
 
 int main(int argc, char** argv){
@@ -164,7 +140,7 @@ int main(int argc, char** argv){
     cout << "  Reading inputs from the file: " << input__ << endl;
     cout << "  Total inputs read: " << total_access << endl;
     cout << "  Input order: ";
-    std::copy(access_list.begin(), access_list.end(), std::ostream_iterator<int>(std::cout, " "));
+    copy(access_list.begin(), access_list.end(), std::ostream_iterator<int>(std::cout, " "));
     cout << endl;
     if(verbose__){
         cout << "  Verbose: On" << endl;
@@ -175,33 +151,77 @@ int main(int argc, char** argv){
     cout << "----------------------------------------" << endl;
 
     if(algo == 1){      // opt
-    }
-    else if(algo == 2){      // fifo:done
-        queue<int> page_list;
+        list<int> page_list;
         int misses = 0;
         while(access_list.size()){
             if(verbose__){cout << access_list.front() << ": ";}
-            if( !check_queue(page_list, access_list.front()) ){
+            cout << endl;
+            if( !(find(page_list.begin(), page_list.end(), access_list.front()) != page_list.end()) ){
                 misses += 1;
-                page_list.push(access_list.front());
+                cout << "Miss\n";
+                if(page_list.size() >= physical_pfs){
+                    cout << "page_list.size() > physical_pfs\n";
+                    vector<int> index;
+                    list<int>::iterator it = page_list.begin();
+                    vector<int>:: iterator it2 = access_list.begin();
+                    print_list(page_list, physical_pfs);
+                    copy(access_list.begin(), access_list.end(), std::ostream_iterator<int>(std::cout, " "));
+                    cout << endl;
+                    while(it != page_list.end()){
+                        while(it2 != access_list.end()){
+                            if(*it == *it2){
+                                cout << it2 - access_list.begin() << endl;
+                                index.insert(index.end(), it2 - access_list.begin());
+                                break;
+                            }
+                            it2++;
+                        }
+                        it++;
+                    }
+                    copy(index.begin(), index.end(), std::ostream_iterator<int>(std::cout, " "));
+                    cout << endl;
+                    int max = max_vector(index);
+                    cout << "Max:" << max << ":" << access_list[max] << endl;
+                    page_list.remove(access_list[max]);
+                }
+                page_list.push_back(access_list.front());
+            }
+            //if(verbose__){print_list(page_list, physical_pfs);}
+            access_list.erase(access_list.begin());
+            cout << endl;
+        }
+        if(verbose__){cout << "----------------------------------------" << endl;}
+        cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
+        cout << "----------------------------------------" << endl;
+    }
+    ///////////////////
+    else if(algo == 2){      // fifo:done
+        list<int> page_list;
+        int misses = 0;
+        while(access_list.size()){
+            if(verbose__){cout << access_list.front() << ": ";}
+            if( !(find(page_list.begin(), page_list.end(), access_list.front()) != page_list.end()) ){
+                misses += 1;
+                page_list.push_back(access_list.front());
                 if(page_list.size() > physical_pfs){
-                    page_list.pop();
+                    page_list.pop_front();
                 }
             }
-            if(verbose__){print_queue(page_list, physical_pfs);}
+            if(verbose__){print_list(page_list, physical_pfs);}
             access_list.erase(access_list.begin());
         }
         if(verbose__){cout << "----------------------------------------" << endl;}
         cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
         cout << "----------------------------------------" << endl;
     }
+    ///////////////////
     else if(algo == 3){      // lru:done
         list<int> page_list;
         int misses = 0;
         int p;
         while(access_list.size()){
             if(verbose__){cout << access_list.front() << ": ";}
-            if( check_list(page_list, access_list.front()) == -1 ){
+            if( !(find(page_list.begin(), page_list.end(), access_list.front()) != page_list.end()) ){
                 misses += 1;
                 if(page_list.size() >= physical_pfs){
                     page_list.pop_front();

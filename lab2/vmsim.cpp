@@ -68,7 +68,7 @@ void print_list(list<int> l, int a){
 }
 
 int max_vector(vector<int> v){
-    int n;
+    int n = v[0];
     int i = 1;
     while(i < v.size()){
         if(v[i] > v[i-1]){
@@ -150,45 +150,34 @@ int main(int argc, char** argv){
     }
     cout << "----------------------------------------" << endl;
 
-    if(algo == 1){      // opt
+    if(algo == 1){      // opt:done
         list<int> page_list;
         int misses = 0;
         while(access_list.size()){
             if(verbose__){cout << access_list.front() << ": ";}
-            cout << endl;
             if( !(find(page_list.begin(), page_list.end(), access_list.front()) != page_list.end()) ){
                 misses += 1;
-                cout << "Miss\n";
                 if(page_list.size() >= physical_pfs){
-                    cout << "page_list.size() > physical_pfs\n";
                     vector<int> index;
-                    list<int>::iterator it = page_list.begin();
                     vector<int>:: iterator it2 = access_list.begin();
-                    print_list(page_list, physical_pfs);
-                    copy(access_list.begin(), access_list.end(), std::ostream_iterator<int>(std::cout, " "));
-                    cout << endl;
-                    while(it != page_list.end()){
-                        while(it2 != access_list.end()){
-                            if(*it == *it2){
-                                cout << it2 - access_list.begin() << endl;
-                                index.insert(index.end(), it2 - access_list.begin());
-                                break;
-                            }
-                            it2++;
+                    while(it2 != access_list.end()){
+                        list<int>::iterator it = find(page_list.begin(), page_list.end(), *it2);
+                        if(*it == *it2){
+                            index.insert(index.begin(), *it);
                         }
-                        it++;
+                        it2++;
                     }
-                    copy(index.begin(), index.end(), std::ostream_iterator<int>(std::cout, " "));
-                    cout << endl;
-                    int max = max_vector(index);
-                    cout << "Max:" << max << ":" << access_list[max] << endl;
-                    page_list.remove(access_list[max]);
+                    if(!index.empty()){
+                        page_list.remove(index.front());
+                    }
+                    else{
+                        page_list.pop_front();
+                    }
                 }
                 page_list.push_back(access_list.front());
             }
-            //if(verbose__){print_list(page_list, physical_pfs);}
+            if(verbose__){print_list(page_list, physical_pfs);}
             access_list.erase(access_list.begin());
-            cout << endl;
         }
         if(verbose__){cout << "----------------------------------------" << endl;}
         cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
@@ -202,10 +191,10 @@ int main(int argc, char** argv){
             if(verbose__){cout << access_list.front() << ": ";}
             if( !(find(page_list.begin(), page_list.end(), access_list.front()) != page_list.end()) ){
                 misses += 1;
-                page_list.push_back(access_list.front());
-                if(page_list.size() > physical_pfs){
+                if(page_list.size() >= physical_pfs){
                     page_list.pop_front();
                 }
+                page_list.push_back(access_list.front());
             }
             if(verbose__){print_list(page_list, physical_pfs);}
             access_list.erase(access_list.begin());

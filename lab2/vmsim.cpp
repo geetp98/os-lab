@@ -77,7 +77,7 @@ int max_vector(vector<int> v){
 }
 
 int main(int argc, char** argv){
-    unsigned int i = 0;
+    unsigned int i;
     std::cout << std::fixed;
     std::cout << std::setprecision(2);
 

@@ -7,22 +7,14 @@
 #include <list>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <stdio.h>
 
-const int opt_i = 1;
-const int fifo_i = 2;
-const int lru_i = 3;
-
-int misses_opt = 0;
-int misses_fifo = 0;
-int misses_lru = 0;
-int total_access = 0;
-
-int verbose__ = 1;
+const int opt = 1;
+const int fifo = 2;
+const int lru = 3;
 
 using namespace std;
 
-int isdigit2(const char *s) {
+int isdigit2(char *s) {
     /* Convert a character array into integer,
        but only after verification that
        input contains integers only.
@@ -41,15 +33,15 @@ int isdigit2(const char *s) {
     return sum;
 }
 
-int chosen_algo(const char *s){       // returns appropriate integer with
+int chosen_algo(char *s){       // returns appropriate integer with
     if(!strcmp(s, "opt")){      // respect to input of algorithms
-        return opt_i;
+        return opt;
     }
     if(!strcmp(s, "fifo")){
-        return fifo_i;
+        return fifo;
     }
     if(!strcmp(s, "lru")){
-        return lru_i;
+        return lru;
     }
     return -1;
 }
@@ -84,22 +76,22 @@ int max_vector(vector<int> v){
     return n;
 }
 
-int main2(int physical_pfs, const char* input__, char* algo__){
+int main(int argc, char** argv){
     unsigned int i = 0;
     std::cout << std::fixed;
     std::cout << std::setprecision(2);
 
-    int algo = chosen_algo(algo__);            // Number of the chosen one. 1-opt, 2-fifo, 3-lru
+    int physical_pfs = isdigit2(argv[1]);       // Number of physical page frames
+    char* input__ = argv[2];                    // Name of the input file
+    int algo = chosen_algo(argv[3]);            // Number of the chosen one. 1-opt, 2-fifo, 3-lru, enter anakin for a surprise
+    int verbose__ = isdigit2(argv[4]);          // verbose
 
     if(physical_pfs > 100 || physical_pfs < 1){
         cout << "Physical page frames must be between 2 and 100" << endl;
         return 0;
     }
     if(algo == -1){
-        if(!strcmp(algo__, "anakin")){
-            return 0;
-        }
-        cout << "No algorithm named " << algo__ << "\nPlease enter one of 'opt', 'fifo' or 'lru'" << endl;
+        cout << "No algorithm named " << argv[3] << "\nPlease enter one of 'opt', 'fifo' or 'lru'" << endl;
         return 0;
     }
     if(verbose__ != 0 && verbose__ != 1){
@@ -114,17 +106,13 @@ int main2(int physical_pfs, const char* input__, char* algo__){
 
     vector<int> access_list(0,0);
     std::vector<int>::iterator it = access_list.begin();
+    int total_access = 0;
     char *char_a;
     i = 0;
     int prev = 0;
-    total_access = 0;
     while(i < line.size()){
         if(line[i] == ' '){
             total_access += 1;
-            if( isdigit2((char*)line.substr(prev, i - prev).c_str()) == -1 ){
-                cout << "File corrupted. Try again. Now Exiting..";
-                exit(0);
-            }
             access_list.insert(access_list.end(), isdigit2((char*)line.substr(prev, i - prev).c_str()));
             prev = i+1;
         }
@@ -139,31 +127,33 @@ int main2(int physical_pfs, const char* input__, char* algo__){
     }
     access_list.insert(access_list.end(), isdigit2((char*)line.substr(prev, i - prev).c_str()));
 
+    cout << "----------------------------------------" << endl;
+    cout << "Starting now..." << endl;
+    cout << "  Algorithm: " << argv[3] << endl;
+    cout << "  Number of page frames: " << physical_pfs << endl;
+    cout << "  Reading inputs from the file: " << input__ << endl;
+    cout << "  Total inputs read: " << total_access << endl;
+    cout << "  Input order: ";
+    copy(access_list.begin(), access_list.end(), std::ostream_iterator<int>(std::cout, " "));
+    cout << endl;
     if(verbose__){
-        cout << "----------------------------------------" << endl;
-        cout << "Starting now..." << endl;
-        cout << "  Algorithm: " << algo__ << endl;
-        cout << "  Number of page frames: " << physical_pfs << endl;
-        cout << "  Reading inputs from the file: " << input__ << endl;
-        cout << "  Total inputs read: " << total_access << endl;
-        cout << "  Input order: ";
-        copy(access_list.begin(), access_list.end(), std::ostream_iterator<int>(std::cout, " "));
-        cout << endl;
         cout << "  Verbose: On" << endl;
-        cout << "----------------------------------------" << endl;
     }
+    else{
+        cout << "  Verbose: Off" << endl;
+    }
+    cout << "----------------------------------------" << endl;
 
-    if(algo == 1){      // opt_i:done
+    if(algo == 1){      // opt:done
         list<int> page_list;
-        misses_opt = 0;
-        ;
+        int misses = 0;
         int fault = 0;
         while(access_list.size()){
             if(verbose__){cout << access_list.front() << ": ";}
             fault = 0;
             if( !(find(page_list.begin(), page_list.end(), access_list.front()) != page_list.end()) ){
+                misses += 1;
                 fault = 1;
-                misses_opt += 1;
                 if(page_list.size() >= physical_pfs){
                     vector<int> index;
                     vector<int>:: iterator it2 = access_list.begin();
@@ -187,21 +177,20 @@ int main2(int physical_pfs, const char* input__, char* algo__){
             access_list.erase(access_list.begin());
         }
         if(verbose__){cout << "----------------------------------------" << endl;}
-        cout << "Miss rate [OPT] = " << misses_opt << "/" << total_access << " = " << (double)misses_opt/total_access << endl;
+        cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
         cout << "----------------------------------------" << endl;
     }
     ///////////////////
-    else if(algo == 2){      // fifo_i:done
+    else if(algo == 2){      // fifo:done
         list<int> page_list;
-        misses_fifo = 0;
-        ;
+        int misses = 0;
         int fault = 0;
         while(access_list.size()){
             if(verbose__){cout << access_list.front() << ": ";}
             fault = 0;
             if( !(find(page_list.begin(), page_list.end(), access_list.front()) != page_list.end()) ){
+                misses += 1;
                 fault = 1;
-                misses_fifo += 1;
                 if(page_list.size() >= physical_pfs){
                     page_list.pop_front();
                 }
@@ -211,22 +200,21 @@ int main2(int physical_pfs, const char* input__, char* algo__){
             access_list.erase(access_list.begin());
         }
         if(verbose__){cout << "----------------------------------------" << endl;}
-        cout << "Miss rate [FIFO] = " << misses_fifo << "/" << total_access << " = " << (double)misses_fifo/total_access << endl;
+        cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
         cout << "----------------------------------------" << endl;
     }
     ///////////////////
-    else if(algo == 3){      // lru_i:done
+    else if(algo == 3){      // lru:done
         list<int> page_list;
-        misses_lru = 0;
-        ;
+        int misses = 0;
         int fault = 0;
         int p;
         while(access_list.size()){
             if(verbose__){cout << access_list.front() << ": ";}
             fault = 0;
             if( !(find(page_list.begin(), page_list.end(), access_list.front()) != page_list.end()) ){
+                misses += 1;
                 fault = 1;
-                misses_lru += 1;
                 if(page_list.size() >= physical_pfs){
                     page_list.pop_front();
                 }
@@ -241,7 +229,7 @@ int main2(int physical_pfs, const char* input__, char* algo__){
             access_list.erase(access_list.begin());
         }
         if(verbose__){cout << "----------------------------------------" << endl;}
-        cout << "Miss rate [LRU] = " << misses_lru << "/" << total_access << " = " << (double)misses_lru/total_access << endl;
+        cout << "Miss rate = " << misses << "/" << total_access << " = " << (double)misses/total_access << endl;
         cout << "----------------------------------------" << endl;
     }
 

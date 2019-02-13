@@ -89,7 +89,7 @@ int main2(int physical_pfs, const char* input__, char* algo__){
     std::cout << std::fixed;
     std::cout << std::setprecision(2);
 
-    int algo = chosen_algo(algo__);            // Number of the chosen one. 1-opt_i, 2-fifo_i, 3-lru_i, enter anakin for a surprise
+    int algo = chosen_algo(algo__);            // Number of the chosen one. 1-opt, 2-fifo, 3-lru
 
     if(physical_pfs > 100 || physical_pfs < 1){
         cout << "Physical page frames must be between 2 and 100" << endl;

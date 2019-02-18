@@ -23,6 +23,12 @@ int isdigit2(const char *s) {
 }
 
 int main(){
+    cout << "Enter the parameters in following sequence:" << endl;
+    cout << " 1.Range of the frames (positive interger)" << endl;
+    cout << " 2.Length of the file (positive interger)" << endl;
+    cout << " 3.Filename for the file to be generated" << endl;
+    cout << "For example, enter the following." << endl;
+    cout << "20 100 vmrefs.dat" << endl;
     cout << ">";
 
     int range;
@@ -30,6 +36,13 @@ int main(){
     char filename[24];
 
     cin >> range >> length >> filename;
+
+    if(range <= 2 || length <= 2){
+        cout << ".." << endl;
+        cout << "Enter proper sequences!!.. now exiting" << endl;
+        cout << ".." << endl;
+        return 0;
+    }
 
     freopen(filename,"w",stdout);
     unsigned int i = 0;

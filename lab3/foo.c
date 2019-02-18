@@ -6,7 +6,7 @@ void disp__(char* filename){
 	int blocks[3];
 	_directory_entry _directory_entries[4];
 	char buf[1024];
-	int __block;
+	int which_block;
 	int check;
 	
 	int total_files=0, total_dirs=0;
@@ -43,24 +43,24 @@ void disp__(char* filename){
 				if(strcmp(_directory_entries[j].fname, filename) == 0){
 					//printf("File found!!\n");
 					int check = 0;
-					__block = stoi(_inode_table[e_inode].XX, 2);
-					if(__block != 0){
-						check = readSFS(__block, buf);
+					which_block = stoi(_inode_table[e_inode].XX, 2);
+					if(which_block != 0){
+						check = readSFS(which_block, buf);
 						if(check){
 							printf("%s", buf);
 						}
 					}
-					__block = stoi(_inode_table[e_inode].YY, 2);
-					if(__block != 0){
-						check = readSFS(__block, buf);
+					which_block = stoi(_inode_table[e_inode].YY, 2);
+					if(which_block != 0){
+						check = readSFS(which_block, buf);
 						if(check){
 							printf("%s", buf);
 						}
 					}
 					check = 0;
-					__block = stoi(_inode_table[e_inode].ZZ, 2);
-					if(__block != 0){
-						check = readSFS(__block, buf);
+					which_block = stoi(_inode_table[e_inode].ZZ, 2);
+					if(which_block != 0){
+						check = readSFS(which_block, buf);
 						if(check){
 							printf("%s", buf);
 						}
@@ -73,7 +73,6 @@ void disp__(char* filename){
 			}
 		}
 	}
-	printf("File not found!!\n");
 }
 
 bool check(char* filename){
@@ -81,7 +80,7 @@ bool check(char* filename){
 	int blocks[3];
 	_directory_entry _directory_entries[4];
 	char buf[1024];
-	int __block;
+	int which_block;
 	int check;
 	
 	int total_files=0, total_dirs=0;
@@ -123,29 +122,30 @@ bool check(char* filename){
 			}
 		}
 	}
-	printf("File not found!!\n");
 	return false;
+}
+
+void fakefunction(){
+	return;
 }
 
 int main(int argc, char** argv){
 	mountSFS();
 	char command[8];
 	char filename[252];
-	while(1){
+	/*while(1){
 		printf("SFS:: /# ");
 		memset(command, 0, 8);
 		scanf("%s", command);
 		if(strcmp(command, "ls") == 0){
 			ls();
 		}
-		else if(strcmp(command, "display") == 0){
-			
-		}
 		else if(strcmp(command, "exit") == 0){
 			break;
 		}
-	}
-	//printf("%d\n", check(argv[1]));
-	//disp__(argv[1]);
+	}*/
+	int disp = check(argv[1]);
+	disp?printf("File found!!\n"):printf("File not found..\n");
+	disp?disp__(argv[1]):fakefunction();
 	return 0;
 }

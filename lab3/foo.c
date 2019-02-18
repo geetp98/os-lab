@@ -1,5 +1,6 @@
 #include "sfs.h"
 #include <stdbool.h>
+#include <string.h>
 
 void disp__(char* filename){
 	char itype;
@@ -129,23 +130,62 @@ void fakefunction(){
 	return;
 }
 
+int firstwhitespace(char* s){
+	int i = 0;
+	while(i < strlen(s)){
+		if(s[i] == ' '){
+			return i;
+		}
+		i++;
+	}
+	return i;
+}
+
+int endofstring(char* s){
+	int i = 0;
+	while(i < strlen(s)){
+		if(s[i] == '\0'){
+			return i;
+		}
+		i++;
+	}
+	return i;
+}
+
 int main(int argc, char** argv){
 	mountSFS();
-	char command[8];
+	char command[8+1+252];
+	char c1[8];
 	char filename[252];
-	/*while(1){
+	while(1){
 		printf("SFS:: /# ");
-		memset(command, 0, 8);
-		scanf("%s", command);
-		if(strcmp(command, "ls") == 0){
+		memset(command, 0, 8+1+252);
+		memset(c1, 0, 8);
+		scanf("%[^\n]%*c", command);
+		strncpy(c1, command, firstwhitespace(command));
+		//printf("command : %s\n", command);
+		//printf("firstwhitespace : %d\n", firstwhitespace(command));
+		//printf("c1 : %s\n", c1);
+		if(!strcmp(c1, "ls")){
 			ls();
 		}
-		else if(strcmp(command, "exit") == 0){
+		if(!strcmp(c1, "display")){
+			memset(filename, 0, 252);
+			//printf("firstwhitespace : %d\n", firstwhitespace(command));
+			//printf("sizeof(command) : %d\n", (int)endofstring(command));
+			//printf("diff : %d\n", (int)endofstring(command) - firstwhitespace(command));
+			strncpy(filename, &command[firstwhitespace(command)+1], endofstring(command) - firstwhitespace(command));
+			//printf("filename : %s\n", filename);
+			int disp;
+			disp = check(filename);
+			disp?disp__(filename):printf("File not found..\n");
+		}
+		else if(!strcmp(c1, "exit")){
 			break;
 		}
-	}*/
-	int disp = check(argv[1]);
-	disp?printf("File found!!\n"):printf("File not found..\n");
-	disp?disp__(argv[1]):fakefunction();
+		memset(command, 0, 8+1+252);
+		memset(c1, 0, 8);
+		printf("\n\n");
+	}
 	return 0;
 }

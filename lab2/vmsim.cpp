@@ -113,20 +113,16 @@ int main(int argc, char** argv){
     while(i < line.size()){
         if(line[i] == ' '){
             total_access += 1;
+            if( isdigit2((char*)line.substr(prev, i - prev).c_str()) == -1 ){
+                cout << "File corrupted. Try again. Now Exiting..";
+                exit(0);
+            }
             access_list.insert(access_list.end(), isdigit2((char*)line.substr(prev, i - prev).c_str()));
             prev = i+1;
         }
         i += 1;
     }
-    total_access += 1;
-
-    i = line.size();
-    while(line[i] != ' '){
-        prev = i;
-        i -= 1;
-    }
-    access_list.insert(access_list.end(), isdigit2((char*)line.substr(prev, i - prev).c_str()));
-
+    
     cout << "----------------------------------------" << endl;
     cout << "Starting now..." << endl;
     cout << "  Algorithm: " << argv[3] << endl;

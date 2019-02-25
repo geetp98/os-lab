@@ -1,9 +1,9 @@
-/*******************************************************************/
-/* CS451 Assignment 6 : File Systems
-/* Spring 2010
-/* Colorado State University, Fort Collins, CO
-/*
-/*******************************************************************/
+/******************************************************************
+  CS451 Assignment 6 : File Systems
+  Spring 2010
+  Colorado State University, Fort Collins, CO
+ 
+ ******************************************************************/
 
 #include <stdio.h>
 #include <string.h>
@@ -70,11 +70,11 @@ void cd(char *);
 void md(char *);
 void stats();
 
-/*############################################################################*/
-/****************************************************************************/
-/* returns the integer value of string s; -1 on error
-/*
-/****************************************************************************/
+/*#########################################################################
+ **************************************************************************
+  returns the integer value of string s; -1 on error
+ 
+ ***************************************************************************/
 	
 int stoi(char *s, int n) {
 	int i;
@@ -88,11 +88,11 @@ int stoi(char *s, int n) {
 	return ret;
 }
 
-/****************************************************************************/
-/* returns the string representation of num in s
-/* n is the width of the number; 0 padded if required
-/*
-/****************************************************************************/
+/***************************************************************************
+  returns the string representation of num in s
+  n is the width of the number; 0 padded if required
+ 
+ ***************************************************************************/
 
 void itos(char *s, int num, int n) {
 	char st[1024];
@@ -100,20 +100,20 @@ void itos(char *s, int num, int n) {
 	strncpy(s,st,n);	
 }
 
-/****************************************************************************/
-/* prints a prompt with current working directory
-/*
-/****************************************************************************/
+/***************************************************************************
+  prints a prompt with current working directory
+ 
+ ***************************************************************************/
 
 void printPrompt() {
 	printf("SFS::%s# ",current_working_directory);
 }
 
-/*############################################################################*/
-/****************************************************************************/
-/* reads SFS metadata into memory structures
-/* 
-/****************************************************************************/
+/*#########################################################################
+ **************************************************************************
+  reads SFS metadata into memory structures
+  
+ ***************************************************************************/
 
 void mountSFS() {
 	int i;
@@ -144,11 +144,11 @@ void mountSFS() {
 	fread(_inode_table, 1, 1024, df);
 }
 
-/****************************************************************************/
-/* reads a block of data from disk file into buffer
-/* returns 0 if invalid block number
-/*
-/****************************************************************************/
+/****************************************************************************
+  reads a block of data from disk file into buffer
+  returns 0 if invalid block number
+ 
+ ***************************************************************************/
 
 int readSFS(int block_number, char buffer[1024]) {
 	
@@ -162,12 +162,12 @@ int readSFS(int block_number, char buffer[1024]) {
 	return 1;
 }
 
-/****************************************************************************/
-/* writes a block of data from buffer to disk file
-/* if buffer is null pointer, then writes all zeros
-/* returns 0 if invalid block number
-/*
-/****************************************************************************/
+/****************************************************************************
+  writes a block of data from buffer to disk file
+  if buffer is null pointer, then writes all zeros
+  returns 0 if invalid block number
+ 
+ ***************************************************************************/
 	
 int writeSFS(int block_number, char buffer[1024]) {
 	char empty_buffer[1024];
@@ -191,14 +191,14 @@ int writeSFS(int block_number, char buffer[1024]) {
 }
 
 
-/*############################################################################*/
-/****************************************************************************/
-/* finds the first available block using the block bitmap
-/* updates the bitmap
-/* writes the block bitmap to disk file
-/* returns -1 on error; otherwise the block number
-/*
-/****************************************************************************/
+/*############################################################################*
+ **************************************************************************
+  finds the first available block using the block bitmap
+  updates the bitmap
+  writes the block bitmap to disk file
+  returns -1 on error; otherwise the block number
+ 
+ ***************************************************************************/
 
 int getBlock() {
 	int i;
@@ -215,11 +215,11 @@ int getBlock() {
 	return i;
 }
 
-/****************************************************************************/
-/* updates block bitmap when a block is no longer used
-/* blocks 0 through 3 are treated special; so they are always in use
-/*
-/****************************************************************************/
+/****************************************************************************
+  updates block bitmap when a block is no longer used
+  blocks 0 through 3 are treated special; so they are always in use
+ 
+ ***************************************************************************/
 
 void returnBlock(int index) {
 	if (index > 3  && index <= BLOCK_MAX) {
@@ -230,13 +230,13 @@ void returnBlock(int index) {
 	}
 }
 
-/****************************************************************************/
-/* finds the first unused position in inode table using the inode bitmap
-/* updates the bitmap
-/* writes the inode bitmap to disk file
-/* returns -1 if table is full; otherwise the position
-/*
-/****************************************************************************/
+/****************************************************************************
+  finds the first unused position in inode table using the inode bitmap
+  updates the bitmap
+  writes the inode bitmap to disk file
+  returns -1 if table is full; otherwise the position
+ 
+ ***************************************************************************/
 
 int getInode() {
 	int i;
@@ -253,10 +253,10 @@ int getInode() {
 	return i;
 }
 
-/****************************************************************************/
-/* updates inode bitmap when an inode entry is no longer used
-/*
-/****************************************************************************/
+/****************************************************************************
+  updates inode bitmap when an inode entry is no longer used
+ 
+ ***************************************************************************/
 
 void returnInode(int index) {
 	if (index > 0  && index <= INODE_MAX) {
@@ -268,11 +268,11 @@ void returnInode(int index) {
 }
 	
 	
-/*############################################################################*/
-/****************************************************************************/
-/* makes root directory the current directory 
-/*
-/****************************************************************************/
+/*############################################################################
+**************************************************************************
+  makes root directory the current directory 
+ 
+ ***************************************************************************/
 
 void rd() {
 	CD_INODE_ENTRY = 0; // first inode entry is for root directory
@@ -280,10 +280,10 @@ void rd() {
 	current_working_directory[1]=0;
 }
 
-/****************************************************************************/
-/* lists all files and directories in the current directory 
-/*
-/****************************************************************************/
+/****************************************************************************
+  lists all files and directories in the current directory 
+ 
+ ***************************************************************************/
 
 void ls() {
 	char itype;
@@ -334,11 +334,11 @@ void ls() {
 	printf("\n%d file%c and %d director%s.\n",total_files,(total_files<=1?0:'s'),total_dirs,(total_dirs<=1?"y":"ies"));
 }
 
-/****************************************************************************/
-/* moves into the directory <dname> within the current directory if 
-/* it exists
-/*
-/****************************************************************************/
+/***************************************************************************
+  moves into the directory <dname> within the current directory if 
+  it exists
+ 
+ ***************************************************************************/
 
 void cd(char *dname) {
 	char itype;
@@ -394,11 +394,11 @@ void cd(char *dname) {
 	}
 }
 
-/****************************************************************************/
-/* creates a new directory called <dname> in the current directory if the 
-/* name is not already taken and there is still space available
-/*
-/****************************************************************************/
+/****************************************************************************
+  creates a new directory called <dname> in the current directory if the 
+  name is not already taken and there is still space available
+ 
+ ***************************************************************************/
 
 void md(char *dname) {
 	char itype;
@@ -504,10 +504,10 @@ void md(char *dname) {
 	}				
 }
 
-/****************************************************************************/
-/* prints number of free blocks in the disk and free inode entries in the inode table
-/*
-/****************************************************************************/
+/***************************************************************************
+  prints number of free blocks in the disk and free inode entries in the inode table
+ 
+ ***************************************************************************/
 
 void stats() {
 	int blocks_free=BLB, inodes_free=INB;
@@ -519,4 +519,3 @@ void stats() {
 	printf("%d block%c free.\n",blocks_free,(blocks_free<=1?0:'s'));
 	printf("%d inode entr%s free.\n",inodes_free,(inodes_free<=1?"y":"ies"));
 }
-		

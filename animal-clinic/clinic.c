@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pthread.h>
+#include "mythreads.h"
 
 int cur_animal;
 int cur_caretaker;
@@ -33,17 +33,17 @@ int main(int argc, char** argv){
 	int i = 0;
 
 	for(i = 0; i < num_of_animals; i++){
-		pthread_create(&animals[i], NULL, (void*)&animal, NULL);
+		Pthread_create(&animals[i], NULL, (void*)&animal, NULL);
 	}
 	for(i = 0; i < num_of_caretakers; i++){
-		pthread_create(&caretakers[i], NULL, (void*)&caretaker, NULL);
+		Pthread_create(&caretakers[i], NULL, (void*)&caretaker, NULL);
 	}
 
 	for(i = 0; i < num_of_animals; i++){
-		pthread_join(animals[i], NULL);
+		Pthread_join(animals[i], NULL);
 	}
 	for(i = 0; i < num_of_caretakers; i++){
-		pthread_join(caretakers[i], NULL);
+		Pthread_join(caretakers[i], NULL);
 	}
 
 	return 0;

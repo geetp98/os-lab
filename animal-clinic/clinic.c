@@ -43,9 +43,9 @@ void animalInstance(void* a){
 
 	while(true){
 
-		printf("Animal %d queued\n", b);
 		// if animalsInTheYard > 0, then wait
 		if(caretakersInTheYard > 0){
+			printf("Animal %d queued\n", b);
 			Cond_wait(&animalWait, &mutexForAnimalWait);
 		}
 
@@ -78,9 +78,9 @@ void caretakerInstance(void* a){
 
 	while(true){
 
-		printf("Caretaker %d queued\n", b);
 		// if animalsInTheYard > 0, then wait
 		if(animalsInTheYard > 0){
+			printf("Caretaker %d queued\n", b);
 			Cond_wait(&caretakerWait, &mutexForCaretakerWait);
 		}
 
@@ -110,7 +110,7 @@ void caretakerInstance(void* a){
 
 int main(int argc, char** argv){
 
-	printf("Welcome to the Animal Clinic!!\n\n");
+	printf("\nWelcome to the Animal Clinic!!\n\n");
 
 	int numOfAnimals, numOfCaretakers;
 
@@ -118,7 +118,7 @@ int main(int argc, char** argv){
 		numOfAnimals = atoi(argv[1]);
 		numOfCaretakers = atoi(argv[2]);
 		printf("Number of animals: %d\n", numOfAnimals);
-		printf("Number of care-takers: %d\n", numOfCaretakers);
+		printf("Number of care-takers: %d\n\n", numOfCaretakers);
 	}
 	else exit(0);
 

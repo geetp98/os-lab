@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <sys/time.h>
 #include <stdlib.h>
+#include <semaphore.h>
 
 void *Malloc(size_t size) {
     void *p = malloc(size);
@@ -26,7 +27,8 @@ void work(int seconds) {
 }
 
 void Mutex_init(pthread_mutex_t *m) {
-    assert(pthread_mutex_init(m, NULL) == 0);
+    int rc = pthread_mutex_init(m, NULL);
+    assert(rc == 0);
 }
 
 void Mutex_lock(pthread_mutex_t *m) {
@@ -53,6 +55,20 @@ void Cond_signal(pthread_cond_t *c) {
     assert(rc == 0);
 }
 
+// void Sem_init(sem_t * sem) {
+//     int rc = sem_init(sem,pshared,value);
+//     assert(rc == 1);
+// }
+
+// void Sem_post(sem_t * sem) {
+//     int rc = sem_post(sem);
+//     assert(rc == 1);
+// }
+
+// void Sem_wait(sem_t * sem) {
+//     int rc = sem_wait(sem);
+//     assert(rc == 1);
+// }
 
 void Pthread_create(pthread_t *thread, const pthread_attr_t *attr, 	
 		    void *(*start_routine)(void*), void *arg) {
@@ -64,6 +80,5 @@ void Pthread_join(pthread_t thread, void **value_ptr) {
     int rc = pthread_join(thread, value_ptr);
     assert(rc == 0);
 }
-
 
 #endif // __MYTHREADS_h__

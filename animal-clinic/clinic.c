@@ -43,7 +43,7 @@ void animalInstance(void* a){
 
 	while(true){
 
-		// if animalsInTheYard > 0, then wait
+		// if caretakersInTheYard > 0, then wait
 		if(caretakersInTheYard > 0){
 			printf("Animal %d queued\n", b);
 			Cond_wait(&animalWait, &mutexForAnimalWait);
@@ -55,7 +55,7 @@ void animalInstance(void* a){
 		printf("Animal %d enters\n", b);
 		usleep( random()%(long)2e6 );
 
-		//Animal exits the yard;
+		//Animal leaves the yard;
 		Mutex_lock(&forAtomicity);
 		animalsInTheYard--;
 		Mutex_unlock(&forAtomicity);
@@ -85,21 +85,22 @@ void caretakerInstance(void* a){
 		}
 
 		Mutex_lock(&mutexForCaretakerInTheYard);
-		Mutex_lock(&forAtomicity);
+		// Mutex_lock(&forAtomicity);
 		caretakersInTheYard++;
-		Mutex_unlock(&forAtomicity);
+		// Mutex_unlock(&forAtomicity);
 		printf("Caretaker %d enters\n", b);
 		usleep( random()%(long)2e6 );
 
-		Mutex_lock(&forAtomicity);
+		// caretaker leaves the yard
+		// Mutex_lock(&forAtomicity);
 		caretakersInTheYard--;
-		Mutex_unlock(&forAtomicity);
+		// Mutex_unlock(&forAtomicity);
 		printf("Caretaker %d leaves\n", b);
 		usleep( random()%(long)2e6 );
 
 		Mutex_unlock(&mutexForCaretakerInTheYard);
 
-		// if the yard is empty signal the caretaker
+		// if the yard is empty signal the animals
 		if(caretakersInTheYard == 0){
 			Cond_signal(&animalWait);
 		}

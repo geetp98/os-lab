@@ -21,5 +21,3 @@ This file has a slightly modified version of `vmsim.cpp`, and added onto that is
 To compile and run it, follow these commands.
 $ g++ vmstats.cpp -o vmstats
 $ ./vmstats
-
-This assignment is also hosted on https://github.com/geetp98/os-lab/tree/master/lab2
